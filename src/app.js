@@ -11,10 +11,25 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('/', async (req, res) => {
 
-    const response = await axios.get('http://192.168.0.7:3000/info');
-    const data = response.data;
+    try {
+    const response = await axios.get('https://api.portfolio.turgutsalgin.com/info', {
+            headers: {
+                'X-Portfolio-Domain': 'turgutsalgin.com'
+            }
+        });
 
-    res.render('index', { title: 'Home Page' , user:data}); 
+         const data = response.data;
+
+             res.render('index', { title: 'Home Page' , user:data}); 
+
+    } catch(e) {
+        console.log(e)
+        res.render('404')
+    }
+
+   
+
+
 });
 
 app.listen(3002, () => {
