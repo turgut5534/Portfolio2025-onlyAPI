@@ -4,6 +4,10 @@ const axios = require('axios');
 require('dotenv').config();
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const upload = multer({ dest: 'temp/' });
+const FormData = require('form-data');
+const fs = require('fs');
 
 
 const app = express();
@@ -26,7 +30,6 @@ app.get('/', async (req, res) => {
 
     try {
         
-        console.log(url)
         const response = await axios.get(`${url}/info`, {
             headers: {
                 'X-Portfolio-Domain': 'turgutsalgin.com'
@@ -35,7 +38,7 @@ app.get('/', async (req, res) => {
 
          const data = response.data;
 
-             res.render('index', { title: 'Home Page' , user:data}); 
+             res.render('index', { title: 'Home Page' , user:data, url}); 
 
     } catch(e) {
         console.log(e)
@@ -49,7 +52,7 @@ app.get('/admin/login', async(req,res) => {
     try {
          res.render('admin/login')
     } catch(e) {
-        console.log(e)
+        // console.log(e)
     }
 
 })
@@ -66,7 +69,7 @@ app.get('/admin/dashboard', async(req,res) => {
         
          res.render('admin/dashboard')
     } catch(e) {
-        console.log(e)
+        // console.log(e)
         res.redirect('/admin/login')
     }
 
@@ -102,7 +105,7 @@ app.get('/admin/profile', async(req,res) => {
             }
         });
         
-         res.render('admin/profile-info', {user: response.data})
+         res.render('admin/profile-info', {user: response.data, websiteUrl: process.env.WEBSITE_URL})
     } catch(e) {
         console.log(e)
         res.redirect('/admin/login')
@@ -188,7 +191,28 @@ app.get('/admin/projects', async(req,res) => {
 })
 
 
+app.post('/upload/profile', upload.single('file'), async (req, res) => {
+  try {
+    const form = new FormData();
+    form.append('file', fs.createReadStream(req.file.path), {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype, // preserves MIME type
+    });
 
+    await axios.post(`${url}/upload/profile`, form, {
+      headers: {
+        ...form.getHeaders(),
+        Authorization: `Bearer ${req.session.token}`,
+      },
+    });
+
+    fs.unlinkSync(req.file.path); // delete temp file
+    res.redirect('/admin/profile');
+  } catch (e) {
+    console.error(e.response?.data || e);
+    res.redirect('/login');
+  }
+});
 
 app.post('/admin/login', async (req, res) => {
   try {
@@ -308,6 +332,19 @@ app.post('/admin/educations', async (req, res) => {
       console.error('Axios error:', e.response?.status, e.response?.data, e.message);
     res.status(500).send('Error');
   }
+});
+
+app.get('/admin/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Logout error:', err);
+      return res.redirect('/admin/dashboard');
+    }
+
+    // clear cookie (important)
+    res.clearCookie('connect.sid');
+    res.redirect('/admin/login');
+  });
 });
 
 
