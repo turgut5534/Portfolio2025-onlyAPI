@@ -1,0 +1,414 @@
+<%- include("partials/header") %>
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href="/" class="logo d-flex align-items-center me-auto">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.webp" alt=""> -->
+        <h1 class="sitename"><%= user.profile.fullName%></h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="#hero" class="active">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#resume">Resume</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a class="btn-getstarted" href="#about">Get Started</a>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+
+      <img src="assets/img/profile/profile-bg-5.webp" alt="" data-aos="fade-in">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <h2>Hi, <%= user.profile.fullName%></h2>
+            <p>I'm a <span class="typed" data-typed-items="<% user.titles.forEach((title) => { %><%= title.title%>,<%})%>"></span><span class="typed-cursor" aria-hidden="true"></span></p>
+            <div class="social-links">
+              <% if (user.profile.linkedinUrl) {%>
+              <a href="<%= user.profile.githubUrl%>"><i class="bi bi-github"></i></a>
+              <%}%>
+              <% if (user.profile.websiteUrl) {%>
+              <a href="<%= user.profile.websiteUrl%>"><i class="bi bi-browser-chrome"></i></a>
+               <%}%>
+              <% if (user.profile.linkedinUrl) {%>
+              <a href="<%= user.profile.linkedinUrl%>"><i class="bi bi-linkedin"></i></a>
+              <%}%>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span class="subtitle">About Me</span>
+        <h2>About Me</h2>
+        <p><%= user.profile.bio%></p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-5">
+          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="150">
+            <div class="profile-card">
+              <div class="profile-header">
+                <div class="profile-avatar">
+                  <img src="assets/img/profile/profile-square-3.webp" class="img-fluid" alt="">
+                  <div class="status-indicator"></div>
+                </div>
+                <h3><%= user.profile.fullName %></h3>
+                <span class="role"><<%= user.profile.title %>></span>
+              </div>
+
+
+              <div class="profile-actions">
+                <a href="/" class="btn-primary"><i class="bi bi-download"></i> Download CV</a>
+                <a href="#" class="btn-secondary"><i class="bi bi-envelope"></i> Contact</a>
+              </div>
+
+              <div class="social-connect">
+                 <% if (user.profile.linkedinUrl) {%>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+                <% } %>
+                 <% if (user.profile.githubUrl) {%>
+                <a href="#"><i class="bi bi-github"></i></a>
+                <% } %>
+                 <% if (user.profile.websiteUrl) {%>
+                <a href="#"><i class="bi bi-browser-chrome"></i></a>
+                <% } %>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-8" data-aos="fade-left" data-aos-delay="200">
+            <div class="content-wrapper">
+              <div class="bio-section">
+                <div class="section-tag">About Me</div>
+                <h2>Transforming Ideas into Digital Reality</h2>
+                <p><%= user.profile.bio %></p>
+              </div>
+
+              <div class="details-grid">
+
+                <div class="detail-item" data-aos="fade-up" data-aos-delay="300">
+                  <i class="bi bi-mortarboard"></i>
+                  <div class="detail-content">
+                    <span>Degree</span>
+                    <strong><%= user.profile.degree%></strong>
+                  </div>
+                </div>
+
+                <div class="detail-item" data-aos="fade-up" data-aos-delay="350">
+                  <i class="bi bi-geo-alt"></i>
+                  <div class="detail-content">
+                    <span>Based In</span>
+                    <strong><%= user.profile.location %></strong>
+                  </div>
+                </div>
+
+                <div class="detail-item" data-aos="fade-up" data-aos-delay="100">
+                  <i class="bi bi-envelope"></i>
+                  <div class="detail-content">
+                    <span>Email</span>
+                    <strong><%= user.profile.email %></strong>
+                  </div>
+                </div>
+
+                <div class="detail-item" data-aos="fade-up" data-aos-delay="150">
+                  <i class="bi bi-phone"></i>
+                  <div class="detail-content">
+                    <span>Phone</span>
+                    <strong><%= user.profile.phone %></strong>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="skills-showcase" data-aos="fade-up" data-aos-delay="250">
+                <div class="section-tag">Core Skills</div>
+                <h3>Technical Proficiency</h3>
+
+                <div class="skills-list skills-animation">
+  
+                  <% user.skills.forEach((skill) => { %>
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <span class="skill-name"><%= skill.name%></span>
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                   <% }) %>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+    <!-- Resume Section -->
+    <section id="resume" class="resume section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+      <span class="subtitle">Resume</span>
+      <h2>Resume</h2>
+      <p>Explore my professional journey, highlighting key projects, skills, and achievements that showcase my dedication and expertise. From innovative problem-solving to impactful contributions, this resume provides a comprehensive view of my experience and capabilities.</p>
+
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-5">
+          <div class="col-lg-6">
+            <div class="experience-section">
+              <div class="section-header" data-aos="fade-right" data-aos-delay="200">
+                <div class="header-content">
+                  <span class="section-badge">Experience</span>
+                  <h2>Professional Journey</h2>
+          <p>Discover the milestones and experiences that have shaped my career. From challenging projects to key achievements, this journey reflects my growth, expertise, and dedication to delivering meaningful results.</p>
+
+                </div>
+              </div>
+
+              <div class="experience-cards">
+               
+
+                <% user.experiences.forEach((experience) => { %>
+                  <div class="exp-card" data-aos="zoom-in" data-aos-delay="350">
+                    <div class="card-header">
+                      <div class="company-logo">
+                        <i class="bi bi-laptop"></i>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <h3><%= experience.position %></h3>
+                      <p class="company-name"><%= experience.company %></p>
+                      <span class="duration">
+                        <%= new Date(experience.startDate).toLocaleString('en-US', { month: 'long', year: 'numeric' }) %> - 
+                        <%= new Date(experience.endDate).toLocaleString('en-US', { month: 'long', year: 'numeric' }) %>
+                      </span>
+                      <p class="description"><%= experience.description %></p>
+                    </div>
+                  </div>
+                <% }) %>
+
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="education-section">
+              <div class="section-header" data-aos="fade-left" data-aos-delay="200">
+                <div class="header-content">
+                  <span class="section-badge">Education</span>
+               <h2>Academic Background</h2>
+<p>Learn about the education and academic achievements that have laid the foundation for my skills and expertise. From formal studies to specialized training, this background highlights my commitment to learning and growth.</p>
+
+                </div>
+              </div>
+
+              <div class="education-timeline" data-aos="fade-left" data-aos-delay="300">
+                <div class="timeline-track">
+  
+              <% user.educations.forEach((edu) => { %>
+                <div class="timeline-item">
+                  <div class="timeline-marker">
+                    <i class="bi bi-book"></i>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="education-meta">
+                      <span class="year-range">
+                        <%= new Date(edu.startDate).toLocaleString('en-US', { month: 'long', year: 'numeric' }) %> - 
+                        <%= edu.endDate 
+                              ? new Date(edu.endDate).toLocaleString('en-US', { month: 'long', year: 'numeric' }) 
+                              : 'Present' %>
+                      </span>
+                      <span class="degree-level"><%= edu.degree || 'Bachelor' %></span>
+                    </div>
+                    <h4><%= edu.educationName %></h4>
+                    <p class="institution"><%= edu.institution || 'Creative Arts University' %></p>
+                    <p class="description"><%= edu.description %></p>
+                  </div>
+                </div>
+              <% }) %>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Resume Section -->
+
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+      <span class="subtitle">Portfolio</span>
+<h2>Portfolio</h2>
+<p>Explore a selection of my projects that demonstrate creativity, technical skill, and problem-solving ability. Each project reflects my approach to delivering high-quality work and achieving meaningful results.</p>
+
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+
+          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="300">
+
+          <% user.projects.forEach((project) => { %>
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-creative">
+              <div class="portfolio-card">
+                <div class="portfolio-image-container">
+                  <img src="<%= project.coverImageUrl %>" alt="<%= project.name %>" class="img-fluid" loading="lazy">
+                  <div class="portfolio-overlay">
+                    <div class="portfolio-info">
+                      <span class="project-category"><%= project.title %></span>
+                      <h4><%= project.shortDescription %></h4>
+                    </div>
+                    <div class="portfolio-actions">
+                       <% if (project.githubUrl) { %>
+                      <a href="<%= project.githubUrl%>" target="_blank" class=" portfolio-link">
+                        <i class="bi bi-plus-lg"></i>
+                         <%}%>
+                      </a>
+                      <% if (project.liveUrl) { %>
+                      <a href="<%= project.liveUrl%>" target="_blank" class="portfolio-details">
+                        <i class="bi bi-arrow-right"></i>
+                      </a>
+                      <%}%>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          <% }) %>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Portfolio Section -->
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span class="subtitle">Contact</span>
+       <h2>Contact</h2>
+<p>Get in touch to discuss opportunities, collaborations, or any questions you may have. I’m always open to connecting and exploring ways we can work together to create meaningful results.</p>
+
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4">
+            <div class="info-item">
+              <div class="icon-wrapper">
+                <i class="bi bi-geo-alt"></i>
+              </div>
+              <div>
+                <h3>Address</h3>
+                <p><%= user.profile.location %></p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="icon-wrapper">
+                <i class="bi bi-telephone"></i>
+              </div>
+              <div>
+                <h3>Call Me</h3>
+                <p><%= user.profile.phone %></p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="icon-wrapper">
+                <i class="bi bi-envelope"></i>
+              </div>
+              <div>
+                <h3>Email Me</h3>
+                <p><%= user.profile.email %></p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-lg-8">
+            <form action="forms/contact.php" method="post" class="php-email-form">
+              <div class="row gy-4">
+
+                <div class="col-md-6">
+                  <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+                </div>
+
+                <div class="col-md-6">
+                  <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
+                </div>
+
+                <div class="col-md-12">
+                  <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
+                </div>
+
+                <div class="col-md-12">
+                  <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+                </div>
+
+                <div class="col-md-12 text-center">
+                  <div class="loading">Loading</div>
+                  <div class="error-message"></div>
+                  <div class="sent-message">Your message has been sent. Thank you!</div>
+
+                  <button type="submit">Send Message</button>
+                </div>
+
+              </div>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Contact Section -->
+
+  </main>
+
+<%- include("partials/footer") %>
