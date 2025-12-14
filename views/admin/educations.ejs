@@ -1,0 +1,104 @@
+<%- include("partials/header") %>
+<%- include("partials/sidebar") %>
+
+<div class="content" id="content">
+  <h1>User Studies / Education</h1>
+
+  <button class="btn-add" id="addStudyBtn">+ Add Study</button>
+
+  <div class="studies-container">
+    <% studies?.forEach((study, index) => { %>
+      <div class="study-item">
+        <div class="study-header">
+          <h3><%= study.educationName %> <%= study.degree ? '(' + study.degree + ')' : '' %></h3>
+          <div>
+            <button class="btn-edit" data-index="<%= index %>">Edit</button>
+            <form action="/admin/study/delete/<%= index %>" method="POST" style="display:inline;">
+              <button class="btn-delete" type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
+        <p class="study-duration">
+          <% 
+            const start = new Date(study.startDate);
+            const end = study.endDate ? new Date(study.endDate) : null;
+
+            const options = { year: 'numeric', month: 'long' };
+            const startFormatted = !isNaN(start) ? start.toLocaleDateString('en-US', options) : '';
+            const endFormatted = end && !isNaN(end) ? end.toLocaleDateString('en-US', options) : 'Present';
+          %>
+          <%= startFormatted %> - <%= endFormatted %>
+        </p>
+        <p class="study-description"><%= study.description %></p>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<!-- Modal for Adding / Editing Study -->
+<div id="studyModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="modalTitle">Add Study</h2>
+    <form id="studyForm" method="POST" action="/admin/educations">
+      <input type="hidden" name="" id="studyIndex">
+      <label>Education Name</label>
+      <input type="text" name="educationName" id="studyName" required>
+      <label>Degree (optional)</label>
+      <input type="text" name="degree" id="studyDegree">
+      <label>Start Date</label>
+      <input type="date" name="startDate" id="studyStart" required>
+      <label>End Date (optional)</label>
+      <input type="date" name="endDate" id="studyEnd">
+      <label>Description (optional)</label>
+      <textarea name="description" id="studyDescription" rows="4"></textarea>
+      <button type="submit" class="btn-save">Save</button>
+    </form>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
+
+<script>
+  const modal = document.getElementById("studyModal");
+  const addBtn = document.getElementById("addStudyBtn");
+  const closeBtn = modal.querySelector(".close");
+  const form = document.getElementById("studyForm");
+  const modalTitle = document.getElementById("modalTitle");
+
+  const studyName = document.getElementById("studyName");
+  const studyDegree = document.getElementById("studyDegree");
+  const studyStart = document.getElementById("studyStart");
+  const studyEnd = document.getElementById("studyEnd");
+  const studyDescription = document.getElementById("studyDescription");
+  const studyIndex = document.getElementById("studyIndex");
+
+  addBtn.onclick = () => {
+    modalTitle.textContent = "Add Study";
+    studyName.value = "";
+    studyDegree.value = "";
+    studyStart.value = "";
+    studyEnd.value = "";
+    studyDescription.value = "";
+    studyIndex.value = "";
+    modal.style.display = "block";
+  }
+
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (e) => { if(e.target === modal) modal.style.display = "none"; }
+
+  document.querySelectorAll(".btn-edit").forEach(btn => {
+    btn.onclick = () => {
+      const index = btn.dataset.index;
+      const study = <%- JSON.stringify(studies) %>[index];
+      modalTitle.textContent = "Edit Study";
+      studyName.value = study.educationName;
+      studyDegree.value = study.degree || "";
+      studyStart.value = study.startDate ? study.startDate.slice(0,7) : ""; // YYYY-MM
+      studyEnd.value = study.endDate ? study.endDate.slice(0,7) : ""; // YYYY-MM
+      studyDescription.value = study.description || "";
+      studyIndex.value = index;
+      modal.style.display = "block";
+    }
+  });
+</script>

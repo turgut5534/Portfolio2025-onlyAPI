@@ -1,0 +1,124 @@
+<%- include("partials/header") %>
+<%- include("partials/sidebar") %>
+
+<div class="content" id="content">
+  <h1>Portfolios</h1>
+  <button class="btn-add" id="addPortfolioBtn">+ Add Portfolio</button>
+
+  <% if (portfolios && portfolios.length > 0) { %>
+    <div class="portfolios-container">
+      <% portfolios.forEach((portfolio, index) => { %>
+        <div class="portfolio-item">
+          <div class="portfolio-header">
+            <h3><%= portfolio.title %> <% if(portfolio.client){ %> (Client: <%= portfolio.client %>) <% } %></h3>
+            <div>
+              <button class="btn-edit" data-index="<%= index %>">Edit</button>
+              <form action="/admin/portfolio/delete/<%= portfolio.id %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this portfolio?');">Delete</button>
+              </form>
+            </div>
+          </div>
+          <% if (portfolio.date) { %>
+            <p class="portfolio-date"><%= new Date(portfolio.date).toLocaleDateString() %></p>
+          <% } %>
+          <% if (portfolio.thumbnail) { %>
+            <div class="portfolio-thumbnail">
+              <img src="/thumbnails/<%= portfolio.thumbnail %>" alt="<%= portfolio.title %>">
+            </div>
+          <% } %>
+          <% if (portfolio.portfolio_descriptions && portfolio.portfolio_descriptions.length > 0) { %>
+            <ul class="portfolio-descriptions">
+              <% portfolio.portfolio_descriptions.forEach(desc => { %>
+                <li><%= desc.description %></li>
+              <% }) %>
+            </ul>
+          <% } %>
+          <% if (portfolio.portfolio_categories && portfolio.portfolio_categories.length > 0) { %>
+            <div class="portfolio-categories">
+              <% portfolio.portfolio_categories.forEach(cat => { %>
+                <span class="portfolio-category"><%= cat.categories.title %></span>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p style="color:#bbb;">No portfolios added yet.</p>
+  <% } %>
+</div>
+
+<!-- Portfolio Modal -->
+<div id="portfolioModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Add/Edit Portfolio</h2>
+    <form id="portfolioForm" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="id" id="portfolioId">
+      <label>Title</label>
+      <input type="text" name="title" id="portfolioTitle" required>
+
+      <label>Client (optional)</label>
+      <input type="text" name="client" id="portfolioClient">
+
+      <label>Date</label>
+      <input type="date" name="date" id="portfolioDate" required>
+
+      <label>Thumbnail URL (optional)</label>
+      <input type="text" name="thumbnail" id="portfolioThumbnail">
+
+      <label>Descriptions (one per line)</label>
+      <textarea name="descriptions" id="portfolioDescriptions" rows="4" placeholder="Add multiple descriptions separated by new lines"></textarea>
+
+      <label>Categories (comma-separated)</label>
+      <input type="text" name="categories" id="portfolioCategories" placeholder="Design, Web, Photography">
+
+      <button type="submit" class="btn-save">Save</button>
+    </form>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
+
+<script>
+  const portfolioModal = document.getElementById("portfolioModal");
+  const addPortfolioBtn = document.getElementById("addPortfolioBtn");
+  const closeBtn = portfolioModal.querySelector(".close");
+
+  const portfolioId = document.getElementById("portfolioId");
+  const portfolioTitle = document.getElementById("portfolioTitle");
+  const portfolioClient = document.getElementById("portfolioClient");
+  const portfolioDate = document.getElementById("portfolioDate");
+  const portfolioThumbnail = document.getElementById("portfolioThumbnail");
+  const portfolioDescriptions = document.getElementById("portfolioDescriptions");
+  const portfolioCategories = document.getElementById("portfolioCategories");
+
+  addPortfolioBtn.onclick = () => {
+    portfolioId.value = "";
+    portfolioTitle.value = "";
+    portfolioClient.value = "";
+    portfolioDate.value = "";
+    portfolioThumbnail.value = "";
+    portfolioDescriptions.value = "";
+    portfolioCategories.value = "";
+    portfolioModal.style.display = "block";
+  }
+
+  closeBtn.onclick = () => portfolioModal.style.display = "none";
+  window.onclick = (e) => { if(e.target === portfolioModal) portfolioModal.style.display = "none"; }
+
+  document.querySelectorAll(".btn-edit").forEach(btn => {
+    btn.onclick = () => {
+      const index = btn.dataset.index;
+      const portfolio = <%- JSON.stringify(portfolios) %>[index];
+      portfolioId.value = portfolio.id;
+      portfolioTitle.value = portfolio.title;
+      portfolioClient.value = portfolio.client || "";
+      portfolioDate.value = portfolio.date ? portfolio.date.split("T")[0] : "";
+      portfolioThumbnail.value = portfolio.thumbnail || "";
+      portfolioDescriptions.value = portfolio.portfolio_descriptions.map(d => d.description).join("\n");
+      portfolioCategories.value = portfolio.portfolio_categories.map(c => c.categories.title).join(", ");
+      portfolioModal.style.display = "block";
+    }
+  });
+</script>

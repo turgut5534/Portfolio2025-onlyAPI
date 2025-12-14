@@ -1,0 +1,124 @@
+<%- include("partials/header") %>
+<%- include("partials/sidebar") %>
+
+<div class="content" id="content">
+  <h1>User Experiences</h1>
+
+  <button class="btn-add" id="addExperienceBtn">+ Add Experience</button>
+
+<div class="experiences-container">
+  <% experiences?.forEach((exp, index) => { %>
+    <div class="experience-item">
+      <div class="experience-header">
+        <h3><%= exp.position %> at <%= exp.companyName %></h3>
+        <div>
+          <button class="btn-edit" data-index="<%= index %>">Edit</button>
+          <form action="/admin/experience/delete/<%= index %>" method="POST" style="display:inline;">
+            <button class="btn-delete" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+      <p class="experience-duration">
+        <% 
+          const start = new Date(exp.startDate);
+          const end = exp.endDate ? new Date(exp.endDate) : null;
+
+          const options = { year: 'numeric', month: 'long' };
+          const startFormatted = !isNaN(start) ? start.toLocaleDateString('en-US', options) : '';
+          const endFormatted = end && !isNaN(end) ? end.toLocaleDateString('en-US', options) : 'Present';
+        %>
+        <%= startFormatted %> - <%= endFormatted %>
+      </p>
+      <p class="experience-description"><%= exp.description %></p>
+    </div>
+  <% }) %>
+</div>
+
+
+<!-- Modal for Adding / Editing Experience -->
+<div id="experienceModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="modalTitle">Add Experience</h2>
+    <form id="experienceForm" method="POST" action="/admin/experiences">
+      <label>Company Name</label>
+      <input type="text" name="companyName" id="expTitle" required>
+      <label>Position</label>
+      <input type="text" name="position" id="expCompany" required>
+      <label>Start Date</label>
+      <input type="date" name="startDate" id="expStart" required>
+      <label>End Date (optional)</label>
+      <input type="date" name="endDate" id="expEnd">
+      <label>Description</label>
+      <textarea name="description" id="expDescription" rows="4"></textarea>
+      <button type="submit" class="btn-save">Save</button>
+    </form>
+  </div>
+</div>
+
+<div id="experienceModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="modalTitle">Add Experience</h2>
+    <form id="experienceForm" method="POST" action="/admin/experience/save">
+      <input type="hidden" name="index" id="experienceIndex">
+      <label>Title</label>
+      <input type="text" name="title" id="expTitle" required>
+      <label>Company</label>
+      <input type="text" name="company" id="expCompany" required>
+      <label>Start Date</label>
+      <input type="month" name="startDate" id="expStart" required>
+      <label>End Date (optional)</label>
+      <input type="month" name="endDate" id="expEnd">
+      <label>Description</label>
+      <textarea name="description" id="expDescription" rows="4"></textarea>
+      <button type="submit" class="btn-save">Save</button>
+    </form>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
+
+<script>
+  const modal = document.getElementById("experienceModal");
+  const addBtn = document.getElementById("addExperienceBtn");
+  const closeBtn = modal.querySelector(".close");
+  const form = document.getElementById("experienceForm");
+  const modalTitle = document.getElementById("modalTitle");
+
+  const expTitle = document.getElementById("expTitle");
+  const expCompany = document.getElementById("expCompany");
+  const expStart = document.getElementById("expStart");
+  const expEnd = document.getElementById("expEnd");
+  const expDescription = document.getElementById("expDescription");
+  const expIndex = document.getElementById("experienceIndex");
+
+  addBtn.onclick = () => {
+    modalTitle.textContent = "Add Experience";
+    expTitle.value = "";
+    expCompany.value = "";
+    expStart.value = "";
+    expEnd.value = "";
+    expDescription.value = "";
+    expIndex.value = "";
+    modal.style.display = "block";
+  }
+
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (e) => { if(e.target === modal) modal.style.display = "none"; }
+
+  document.querySelectorAll(".btn-edit").forEach(btn => {
+    btn.onclick = () => {
+      const index = btn.dataset.index;
+      const experience = <%- JSON.stringify(experiences) %>[index];
+      modalTitle.textContent = "Edit Experience";
+      expTitle.value = experience.title;
+      expCompany.value = experience.company;
+      expStart.value = experience.startDate;
+      expEnd.value = experience.endDate || "";
+      expDescription.value = experience.description;
+      expIndex.value = index;
+      modal.style.display = "block";
+    }
+  });
+</script>

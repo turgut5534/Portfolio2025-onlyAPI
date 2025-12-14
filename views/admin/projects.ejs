@@ -1,0 +1,126 @@
+<%- include("partials/header") %>
+<%- include("partials/sidebar") %>
+
+<div class="content" id="content">
+  <h1>Projects</h1>
+
+  <button class="btn-add" id="addProjectBtn">+ Add Project</button>
+
+  <div class="projects-container">
+    <% projects?.forEach((project, index) => { %>
+      <div class="project-item">
+        <div class="project-header">
+          <h3><%= project.title %> <% if(project.isFeatured) { %>⭐<% } %></h3>
+          <div>
+            <button class="btn-edit" data-index="<%= index %>">Edit</button>
+            <form action="/admin/project/delete/<%= index %>" method="POST" style="display:inline;">
+              <button class="btn-delete" type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
+        <% if(project.coverImageUrl) { %>
+          <img src="<%= project.coverImageUrl %>" alt="<%= project.title %> Cover" class="project-cover">
+        <% } %>
+        <p class="project-short-description"><%= project.shortDescription %></p>
+        <% if(project.longDescription) { %>
+          <p class="project-long-description"><%= project.longDescription %></p>
+        <% } %>
+        <div class="project-links">
+          <% if(project.githubUrl) { %>
+            <a href="<%= project.githubUrl %>" target="_blank">GitHub</a>
+          <% } %>
+          <% if(project.liveUrl) { %>
+            <a href="<%= project.liveUrl %>" target="_blank">Live</a>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <!-- Modal for Adding / Editing Project -->
+  <div id="projectModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalProjectTitle">Add Project</h2>
+      <form id="projectForm" method="POST" action="/admin/projects">
+        <input type="hidden" name="" id="projectIndex">
+        
+        <label>Title</label>
+        <input type="text" name="title" id="projTitle" required>
+        
+        <label>Short Description</label>
+        <input type="text" name="shortDescription" id="projShortDesc" required>
+        
+        <label>Long Description (optional)</label>
+        <textarea name="longDescription" id="projLongDesc" rows="4"></textarea>
+        
+        <label>Cover Image URL (optional)</label>
+        <input type="text" name="coverImageUrl" id="projCover">
+        
+        <label>GitHub URL (optional)</label>
+        <input type="text" name="githubUrl" id="projGitHub">
+        
+        <label>Live URL (optional)</label>
+        <input type="text" name="liveUrl" id="projLive">
+        
+        <label>
+          <input type="checkbox" name="isFeatured" id="projFeatured"> Featured
+        </label>
+        
+        <button type="submit" class="btn-save">Save</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
+
+<script>
+  const projectModal = document.getElementById("projectModal");
+  const addProjectBtn = document.getElementById("addProjectBtn");
+  const closeProjectBtn = projectModal.querySelector(".close");
+  const projectForm = document.getElementById("projectForm");
+  const modalProjectTitle = document.getElementById("modalProjectTitle");
+
+  const projTitle = document.getElementById("projTitle");
+  const projShortDesc = document.getElementById("projShortDesc");
+  const projLongDesc = document.getElementById("projLongDesc");
+  const projCover = document.getElementById("projCover");
+  const projGitHub = document.getElementById("projGitHub");
+  const projLive = document.getElementById("projLive");
+  const projFeatured = document.getElementById("projFeatured");
+  const projectIndex = document.getElementById("projectIndex");
+
+  addProjectBtn.onclick = () => {
+    modalProjectTitle.textContent = "Add Project";
+    projTitle.value = "";
+    projShortDesc.value = "";
+    projLongDesc.value = "";
+    projCover.value = "";
+    projGitHub.value = "";
+    projLive.value = "";
+    projFeatured.checked = false;
+    projectIndex.value = "";
+    projectModal.style.display = "block";
+  }
+
+  closeProjectBtn.onclick = () => projectModal.style.display = "none";
+  window.onclick = (e) => { if(e.target === projectModal) projectModal.style.display = "none"; }
+
+  document.querySelectorAll(".btn-edit").forEach(btn => {
+    btn.onclick = () => {
+      const index = btn.dataset.index;
+      const project = <%- JSON.stringify(projects) %>[index];
+      modalProjectTitle.textContent = "Edit Project";
+      projTitle.value = project.title;
+      projShortDesc.value = project.shortDescription;
+      projLongDesc.value = project.longDescription || "";
+      projCover.value = project.coverImageUrl || "";
+      projGitHub.value = project.githubUrl || "";
+      projLive.value = project.liveUrl || "";
+      projFeatured.checked = project.isFeatured || false;
+      projectIndex.value = index;
+      projectModal.style.display = "block";
+    }
+  });
+</script>

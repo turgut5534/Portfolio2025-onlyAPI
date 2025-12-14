@@ -1,0 +1,35 @@
+<%- include("partials/header") %>
+<link rel="stylesheet" href="/admin/css/settings.css">
+<%- include("partials/sidebar") %>
+
+  <!-- Content -->
+  <div class="content">
+    <h1>Settings</h1>
+
+    <form action="/admin/settings" method="POST">
+
+      <!-- Setting 1 -->
+      <div class="setting-item">
+        <label for="maintenance">Enable Site Maintenance</label>
+
+        <label class="toggle-switch">
+          <input type="checkbox" id="maintenance" name="maintenance">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Setting 2 -->
+      <div class="setting-item">
+        <label for="show_phone">Allow Phone Number to Be Visible</label>
+
+        <label class="toggle-switch">
+          <input type="checkbox" id="show_phone" name="show_phone">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <button type="submit">Save Settings</button>
+    </form>
+  </div>
+
+<%- include("partials/footer") %>

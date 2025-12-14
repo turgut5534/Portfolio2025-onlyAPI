@@ -1,0 +1,47 @@
+<%- include("partials/header") %>
+<%- include("partials/sidebar") %>
+
+
+<div class="content" id="content">
+  <h1>Skills</h1>
+  <button class="btn btn-add" onclick="openEditModal(1,'','')">+ Add</button>
+
+  <% if (skills && skills.length > 0) { %>
+    <div class="skills-container">
+      <% skills.forEach(skill => { %>
+        <div class="skill-item" data-skill-id="<%= skill.id %>">
+          <div class="skill-header">
+            <span class="skill-title"><%= skill.name %></span>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width: 100"></div>
+          </div>
+          <div class="skill-actions">
+            <button class="btn btn-edit" onclick="openEditModal('<%= skill.id %>', '<%= skill.title %>', '<%= skill.grade %>')">Edit</button>
+            <form action="/admin/skills/delete/<%= skill.id %>" method="POST" style="display:inline;">
+              <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this skill?');">Delete</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p style="color:#bbb;">No skills added yet.</p>
+  <% } %>
+
+</div>
+
+<!-- Edit Skill Modal -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeEditModal()">&times;</span>
+    <h2>Create/Edit Skill</h2>
+    <form action="/admin/skills" method="POST">
+      <input type="text" name="name" id="editTitle" placeholder="Skill Name" required>
+    
+      <button type="submit" class="btn btn-save">Save Changes</button>
+    </form>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
