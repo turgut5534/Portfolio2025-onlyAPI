@@ -334,6 +334,28 @@ app.post('/admin/educations', async (req, res) => {
   }
 });
 
+app.post('/admin/skills/delete/:id', async (req, res) => {
+
+    try {
+        
+        console.log(req.session.token)
+        const newUrl= `${url}/portfolio/skills/${req.params.id}`
+        const response = await axios.delete( newUrl,{
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+        console.log(response.data)
+
+        res.redirect('/admin/skills');
+  } catch(e) {
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
+
 app.get('/admin/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) {
