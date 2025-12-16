@@ -24,21 +24,24 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const url = process.env.WEBSITE_URL
+const url = process.env.API_URL
 
 app.get('/', async (req, res) => {
 
     try {
         
-        const response = await axios.get(`${url}/info`, {
-            headers: {
-                'X-Portfolio-Domain': 'turgutsalgin.com'
-            }
+        const domain = process.env.DOMAIN_NAME
+        const response = await axios.post(`${url}/info`, {
+            domain: domain
         });
 
-         const data = response.data;
+        const data = response.data;
 
-             res.render('index', { title: 'Home Page' , user:data, url}); 
+        if(data.settings.maintanence_enabled) {
+            return res.render('maintanence')
+        }
+
+        res.render('index', { title: 'Home Page' , user:data, url}); 
 
     } catch(e) {
         console.log(e)
@@ -46,6 +49,24 @@ app.get('/', async (req, res) => {
     }
 
 });
+
+app.get('/admin/settings', async (req,res) => {
+
+    try {
+
+        const response = await axios.get(`${url}/portfolio/settings`, {
+            headers: {
+                Authorization: `Bearer ${req.session.token}`
+            }
+        });
+        
+        res.render('admin/settings', {settings: response.data})
+    } catch(e) {
+        console.log(e)
+        res.redirect('/admin/login')
+    }
+
+})
 
 app.get('/admin/login', async(req,res) => {
 
@@ -355,6 +376,27 @@ app.post('/admin/skills/delete/:id', async (req, res) => {
   }
 });
 
+app.post('/admin/skills/update/:id', async (req, res) => {
+
+    try {
+        
+        console.log(req.session.token)
+        const newUrl= `${url}/portfolio/skills/${req.params.id}`
+        const response = await axios.patch( newUrl,{
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+        console.log(response.data)
+
+        res.redirect('/admin/skills');
+  } catch(e) {
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
 app.post('/admin/project/delete/:id', async (req, res) => {
 
     try {
@@ -368,6 +410,27 @@ app.post('/admin/project/delete/:id', async (req, res) => {
 
 
         res.redirect('/admin/projects');
+  } catch(e) {
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
+app.post('/admin/settings/update', async (req, res) => {
+
+    try {
+        console.log(req.body)
+        const newUrl= `${url}/portfolio/settings/${req.body.settings_id}`
+        console.log(newUrl)
+        console.log(req.session.token)
+        const response = await axios.patch( newUrl,req.body,{
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+
+        res.redirect('/admin/settings');
   } catch(e) {
       console.error('Axios error:', e.response?.status, e.response?.data, e.message);
     res.status(500).send('Error');

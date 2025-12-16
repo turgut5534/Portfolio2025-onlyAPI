@@ -41,24 +41,4 @@
     })();
 
 
-    function openEditModal(id, title, grade) {
-    const modal = document.getElementById('editModal');
-    modal.style.display = 'block';
-    document.getElementById('editId').value = id;
-    document.getElementById('editTitle').value = title;
-    document.getElementById('editGrade').value = grade;
-    document.getElementById('editSkillForm').action = '/admin/skills/update/' + id;
-    }
-
-    function closeEditModal() {
-      const modal = document.getElementById('editModal');
-      modal.style.display = 'none';
-    }
-
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-      const modal = document.getElementById('editModal');
-      if (event.target == modal) {
-        modal.style.display = 'none';
-      }
-    }
+ 

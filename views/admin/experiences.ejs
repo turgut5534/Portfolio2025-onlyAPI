@@ -112,8 +112,8 @@
       const index = btn.dataset.index;
       const experience = <%- JSON.stringify(experiences) %>[index];
       modalTitle.textContent = "Edit Experience";
-      expTitle.value = experience.title;
-      expCompany.value = experience.company;
+      expTitle.value = experience.companyName;
+      expCompany.value = experience.position;
       expStart.value = experience.startDate;
       expEnd.value = experience.endDate || "";
       expDescription.value = experience.description;

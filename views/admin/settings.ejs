@@ -6,24 +6,25 @@
   <div class="content">
     <h1>Settings</h1>
 
-    <form action="/admin/settings" method="POST">
+    <form action="/admin/settings/update" method="POST">
 
+      <input type="hidden" name="settings_id" value="<%=settings.id%>">
       <!-- Setting 1 -->
       <div class="setting-item">
         <label for="maintenance">Enable Site Maintenance</label>
 
         <label class="toggle-switch">
-          <input type="checkbox" id="maintenance" name="maintenance">
+          <input type="checkbox" id="maintenance" name="maintenance_enabled" <%if(settings.maintanence_enabled){%>checked<%}%>>
           <span class="slider"></span>
         </label>
       </div>
 
       <!-- Setting 2 -->
       <div class="setting-item">
-        <label for="show_phone">Allow Phone Number to Be Visible</label>
+        <label for="show_phone">Enable Contact Form</label>
 
         <label class="toggle-switch">
-          <input type="checkbox" id="show_phone" name="show_phone">
+          <input type="checkbox" id="show_phone" name="allow_contact" <%if(settings.allow_contact) {%>checked<%}%>>
           <span class="slider"></span>
         </label>
       </div>

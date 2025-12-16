@@ -31,7 +31,7 @@
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
 
-      <img src="assets/img/profile/profile-bg-5.webp" alt="" data-aos="fade-in">
+      <img src="<%= url%>/uploads/images/<%= user.profile.imageUrl %>" alt="" data-aos="fade-in">
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row justify-content-center">
@@ -323,6 +323,7 @@
 
     </section><!-- /Portfolio Section -->
 
+    <% if(user.settings.allow_contact) { %>
     <!-- Contact Section -->
     <section id="contact" class="contact section">
 
@@ -408,7 +409,7 @@
       </div>
 
     </section><!-- /Contact Section -->
-
+    <%}%>
   </main>
 
 <%- include("partials/footer") %>
