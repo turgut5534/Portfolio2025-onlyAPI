@@ -5,6 +5,9 @@ const upload = multer({ dest: 'temp/' });
 const FormData = require('form-data');
 const fs = require('fs');
 const axios = require('axios');
+const tempAuth = require('../middlewares/temp-token')
+
+router.use(tempAuth)
 
 const url = process.env.API_URL
 
@@ -132,7 +135,7 @@ router.get('/experience/edit/:id', async (req,res) => {
             }
         });
 
-        res.render('admin/experiences/update', {experience: response.data})
+        res.render('admin/experiences/edit', {experience: response.data})
 
     } catch(e) {
 
@@ -140,7 +143,7 @@ router.get('/experience/edit/:id', async (req,res) => {
    
 })
 
-router.get('/project/edit/:id', async (req,res) => {
+router.get('/projects/edit/:id', async (req,res) => {
     try {
         
         const response = await axios.get(`${url}/portfolio/project/${req.params.id}`, {
@@ -149,7 +152,7 @@ router.get('/project/edit/:id', async (req,res) => {
             }
         });
 
-        res.render('admin/projects/update', {project: response.data})
+        res.render('admin/projects/edit', {project: response.data})
 
     } catch(e) {
 
@@ -191,7 +194,7 @@ router.get('/titles/edit/:id', async (req,res) => {
    
 })
 
-router.get('/education/edit/:id', async (req,res) => {
+router.get('/educations/edit/:id', async (req,res) => {
     try {
         
         const response = await axios.get(`${url}/portfolio/education/${req.params.id}`, {
@@ -200,7 +203,7 @@ router.get('/education/edit/:id', async (req,res) => {
             }
         });
 
-        res.render('admin/educations/update', {education: response.data})
+        res.render('admin/educations/edit', {education: response.data})
 
     } catch(e) {
 
@@ -374,6 +377,46 @@ router.post('/titles/create', async (req, res) => {
   }
 });
 
+router.post('/experience/create', async (req, res) => {
+
+    try {
+        
+        const newUrl= `${url}/portfolio/experiences`
+        const response = await axios.post( newUrl, req.body, {
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+        console.log(response.data)
+
+        res.redirect('/admin/experiences');
+  } catch(e) {
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
+router.post('/education/create', async (req, res) => {
+
+    try {
+        
+        const newUrl= `${url}/portfolio/educations`
+        const response = await axios.post( newUrl, req.body, {
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+        console.log(response.data)
+
+        res.redirect('/admin/educations');
+  } catch(e) {
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
 router.post('/skills/update', async (req, res) => {
 
     try {
@@ -409,6 +452,47 @@ router.post('/titles/update', async (req, res) => {
     res.status(500).send('Error');
   }
 });
+
+router.post('/education/update/:id', async (req, res) => {
+
+    try {
+
+        const {id} = req.params
+        const newUrl= `${url}/portfolio/educations/${id}`
+        await axios.patch( newUrl, req.body,{
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+        res.redirect('/admin/educations');
+  } catch(e) {
+      console.log(e)
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
+router.post('/experience/update/:id', async (req, res) => {
+
+    try {
+
+        const {id} = req.params
+        const newUrl= `${url}/portfolio/experiences/${id}`
+        await axios.patch( newUrl, req.body,{
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+        res.redirect('/admin/experiences');
+  } catch(e) {
+      console.log(e)
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
 
 router.post('/project/delete/:id', async (req, res) => {
 
@@ -598,6 +682,27 @@ router.post('/skills/delete/:id', async (req, res) => {
         console.log(response.data)
 
         res.redirect('/admin/skills');
+  } catch(e) {
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
+router.post('/titles/delete/:id', async (req, res) => {
+
+    try {
+        
+        console.log(req.session.token)
+        const newUrl= `${url}/portfolio/titles/${req.params.id}`
+        const response = await axios.delete( newUrl,{
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+        console.log(response.data)
+
+        res.redirect('/admin/titles');
   } catch(e) {
       console.error('Axios error:', e.response?.status, e.response?.data, e.message);
     res.status(500).send('Error');

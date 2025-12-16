@@ -12,7 +12,7 @@
         <div class="project-header">
           <h3><%= project.title %> <% if(project.isFeatured) { %>⭐<% } %></h3>
           <div>
-            <button class="btn-edit" data-index="<%= index %>">Edit</button>
+            <a class="btn-edit" href="/admin/projects/edit/<%= project.id%>">">Edit</a>
             <form action="/admin/project/delete/<%= project.id %>" method="POST" style="display:inline;">
               <button class="btn-delete" type="submit">Delete</button>
             </form>
