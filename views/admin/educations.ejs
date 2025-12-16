@@ -13,7 +13,7 @@
           <h3><%= study.educationName %> <%= study.degree ? '(' + study.degree + ')' : '' %></h3>
           <div>
             <button class="btn-edit" data-index="<%= index %>">Edit</button>
-            <form action="/admin/study/delete/<%= index %>" method="POST" style="display:inline;">
+            <form action="/admin/education/delete/<%= study.id %>" method="POST" style="display:inline;">
               <button class="btn-delete" type="submit">Delete</button>
             </form>
           </div>

@@ -355,7 +355,63 @@ app.post('/admin/skills/delete/:id', async (req, res) => {
   }
 });
 
+app.post('/admin/project/delete/:id', async (req, res) => {
 
+    try {
+        
+        const newUrl= `${url}/portfolio/projects/${req.params.id}`
+        const response = await axios.delete( newUrl,{
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+
+        res.redirect('/admin/projects');
+  } catch(e) {
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
+
+app.post('/admin/experience/delete/:id', async (req, res) => {
+
+    try {
+        
+        const newUrl= `${url}/portfolio/experiences/${req.params.id}`
+        const response = await axios.delete( newUrl,{
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+
+        res.redirect('/admin/experiences');
+  } catch(e) {
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
+app.post('/admin/education/delete/:id', async (req, res) => {
+
+    try {
+        
+        const newUrl= `${url}/portfolio/educations/${req.params.id}`
+        const response = await axios.delete( newUrl,{
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+
+        res.redirect('/admin/educations');
+  } catch(e) {
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
 app.get('/admin/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) {

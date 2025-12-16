@@ -13,7 +13,7 @@
         <h3><%= exp.position %> at <%= exp.companyName %></h3>
         <div>
           <button class="btn-edit" data-index="<%= index %>">Edit</button>
-          <form action="/admin/experience/delete/<%= index %>" method="POST" style="display:inline;">
+          <form action="/admin/experience/delete/<%= exp.id %>" method="POST" style="display:inline;">
             <button class="btn-delete" type="submit">Delete</button>
           </form>
         </div>
