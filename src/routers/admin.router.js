@@ -152,7 +152,7 @@ router.get('/projects/edit/:id', async (req,res) => {
             }
         });
 
-        res.render('admin/projects/edit', {project: response.data})
+        res.render('admin/projects/edit', {project: response.data, url})
 
     } catch(e) {
 
@@ -307,7 +307,7 @@ router.get('/projects', async(req,res) => {
             }
         });
         
-         res.render('admin/projects/projects', {projects: response.data})
+         res.render('admin/projects/projects', {projects: response.data, url})
 
     } catch(e) {
         console.log(e)
@@ -616,7 +616,7 @@ router.post('/projects', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        
 
         res.redirect('/admin/projects');
   } catch(e) {
@@ -748,6 +748,40 @@ router.post('/upload/profile', upload.single('file'), async (req, res) => {
 
     fs.unlinkSync(req.file.path); // delete temp file
     res.redirect('/profile');
+  } catch (e) {
+    console.error(e.response?.data || e);
+    res.redirect('/admin/login');
+  }
+});
+
+
+router.post('/projects/create', upload.single('file'), async (req, res) => {
+  try {
+
+    const newUrl= `${url}/portfolio/projects`
+    const response = await axios.post( newUrl, req.body, {
+        headers: {
+            Authorization: `Bearer ${req.session.token}` // if your API needs a token
+        }
+    });
+
+    const projectId = response.data.id
+
+    const form = new FormData();
+    form.append('file', fs.createReadStream(req.file.path), {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype, // preserves MIME type
+    });
+
+    await axios.post(`${url}/upload/projects/cover/${projectId}`, form, {
+      headers: {
+        ...form.getHeaders(),
+        Authorization: `Bearer ${req.session.token}`,
+      },
+    });
+
+    fs.unlinkSync(req.file.path); // delete temp file
+    res.redirect('/admin/projects');
   } catch (e) {
     console.error(e.response?.data || e);
     res.redirect('/admin/login');

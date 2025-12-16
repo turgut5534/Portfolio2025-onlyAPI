@@ -8,19 +8,20 @@
 
   <div class="projects-container">
     <% projects?.forEach((project, index) => { %>
-      <div class="project-item">
+      <div class="project-item"> 
         <div class="project-header">
           <h3><%= project.title %> <% if(project.isFeatured) { %>⭐<% } %></h3>
+          <% if(project.coverImageUrl) { %>
+          <img  style="max-width: 200px; margin-bottom: 10px;" src="<%= url %>/uploads/images/<%= project.coverImageUrl %>" alt="<%= project.title %> Cover" class="project-cover">
+        <% } %>
           <div>
-            <a class="btn-edit" href="/admin/projects/edit/<%= project.id%>">">Edit</a>
+            <a class="btn-edit" href="/admin/projects/edit/<%= project.id%>">Edit</a>
             <form action="/admin/project/delete/<%= project.id %>" method="POST" style="display:inline;">
-              <button class="btn-delete" type="submit">Delete</button>
+              <button class="btn-delete" onclick="return confirm('Are you sure you want to delete this skill?');" type="submit">Delete</button>
             </form>
           </div>
         </div>
-        <% if(project.coverImageUrl) { %>
-          <img src="<%= project.coverImageUrl %>" alt="<%= project.title %> Cover" class="project-cover">
-        <% } %>
+        
         <p class="project-short-description"><%= project.shortDescription %></p>
         <% if(project.longDescription) { %>
           <p class="project-long-description"><%= project.longDescription %></p>

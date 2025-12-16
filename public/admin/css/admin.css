@@ -282,7 +282,7 @@
   color: #fff;
 }
 
-.btn-edit {
+/* .btn-edit {
   background-color: #007bff;
   color: white;
   border: none;
@@ -295,7 +295,7 @@
 
 .btn-edit:hover {
   background-color: #0066d6;
-}
+} */
 
 .btn-delete {
   background-color: red;
@@ -401,4 +401,109 @@
   border-radius: 10px;
   width: 350px;
   position: relative;
+}
+
+
+.projects-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* spacing between projects */
+}
+
+.project-item {
+  background-color: #f9f9f9; /* light background to separate from page */
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(58, 55, 55, 0.1); /* subtle shadow */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.project-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.project-header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.project-cover {
+  border-radius: 6px;
+  max-width: 100%;
+  height: auto;
+}
+
+.project-short-description,
+.project-long-description {
+  margin-top: 0.75rem;
+  line-height: 1.5;
+}
+
+.project-links a {
+  display: inline-block;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  color: #0066d6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.project-links a:hover {
+  text-decoration: underline;
+}
+
+
+.studies-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* spacing between study items */
+}
+
+.study-item {
+  background-color: #f9f9f9; /* light card background */
+  padding: 1.25rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.study-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.study-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.study-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.study-duration {
+  font-style: italic;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+.study-description {
+  margin-top: 0.75rem;
+  line-height: 1.5;
+}
+
+.study-header .btn-edit,
+.study-header .btn-delete {
+  margin-left: 0.5rem;
 }
