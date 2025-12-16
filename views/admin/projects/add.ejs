@@ -1,0 +1,44 @@
+<%- include("../partials/header") %>
+<%- include("../partials/sidebar") %>
+
+<div class="content" id="content">
+  <h1>Add New Project</h1>
+
+  <form action="/admin/projects/create" method="POST" enctype="multipart/form-data">
+    
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" name="title" required>
+    </div>
+
+    <div class="form-group">
+      <label>Short Description</label>
+      <textarea name="shortDescription" rows="2" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Long Description</label>
+      <textarea name="longDescription" rows="4"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Cover Image</label>
+      <input type="file" name="coverImage" accept="image/*">
+    </div>
+
+    <div class="form-group">
+      <label>GitHub URL</label>
+      <input type="url" name="githubUrl">
+    </div>
+
+    <div class="form-group">
+      <label>Live URL</label>
+      <input type="url" name="liveUrl">
+    </div>
+
+
+    <button type="submit" class="btn-add">Add Project</button>
+  </form>
+</div>
+
+<%- include("../partials/footer") %>

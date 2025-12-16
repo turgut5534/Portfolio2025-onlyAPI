@@ -1,0 +1,38 @@
+<%- include("../partials/header") %>
+<%- include("../partials/sidebar") %>
+
+<div class="content" id="content">
+  <h1>Add New Education</h1>
+
+  <form action="/admin/education/create" method="POST">
+    
+    <div class="form-group">
+      <label>Education Name</label>
+      <input type="text" name="educationName" required>
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea name="description" rows="4"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Degree</label>
+      <input type="text" name="degree">
+    </div>
+
+    <div class="form-group">
+      <label>Start Date</label>
+      <input type="date" name="startDate" required>
+    </div>
+
+    <div class="form-group">
+      <label>End Date</label>
+      <input type="date" name="endDate">
+    </div>
+
+    <button type="submit" class="btn-add">Add Education</button>
+  </form>
+</div>
+
+<%- include("../partials/footer") %>

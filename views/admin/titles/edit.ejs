@@ -1,0 +1,19 @@
+<%- include("../partials/header") %>
+<%- include("../partials/sidebar") %>
+
+<div class="content" id="content">
+  <h1>Edit Title (<%= title.title %>)</h1>
+
+  <form action="/admin/titles/update" method="POST">
+    
+    <div class="form-group">
+      <label>Title</label>
+      <input type="hidden" value="<%= title.id %>" name="title_id" id="">
+      <input type="text" name="title" value="<%= title.title%>" required>
+    </div>
+
+    <button type="submit" class="btn-add">Update Title</button>
+  </form>
+</div>
+
+<%- include("../partials/footer") %>

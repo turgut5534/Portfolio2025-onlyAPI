@@ -1,0 +1,31 @@
+<%- include("../partials/header") %>
+<%- include("../partials/sidebar") %>
+
+
+<div class="content" id="content">
+  <h1>Skills</h1>
+  <a class="btn btn-add" href="/admin/skills/add">+ Add</a>
+
+  <% if (skills && skills.length > 0) { %>
+    <div class="skills-container">
+      <% skills.forEach(skill => { %>
+        <div class="skill-item" data-skill-id="<%= skill.id %>">
+          <div class="skill-header">
+            <span class="skill-title"><%= skill.name %></span>
+          </div>
+          <div class="skill-actions">
+            <a href="/admin/skills/edit/<%=skill.id%>" class="btn btn-edit")">Edit</a>
+            <form action="/admin/skills/delete/<%= skill.id %>" method="POST" style="display:inline;">
+              <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this skill?');">Delete</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p style="color:#bbb;">No skills added yet.</p>
+  <% } %>
+
+</div>
+
+<%- include("../partials/footer") %>

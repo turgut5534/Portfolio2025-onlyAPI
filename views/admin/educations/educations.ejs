@@ -1,10 +1,10 @@
-<%- include("partials/header") %>
-<%- include("partials/sidebar") %>
+<%- include("../partials/header") %>
+<%- include("../partials/sidebar") %>
 
 <div class="content" id="content">
   <h1>User Studies / Education</h1>
 
-  <button class="btn-add" id="addStudyBtn">+ Add Study</button>
+  <a class="btn-add" href="/admin/educations/add" id="addStudyBtn">+ Add Study</a>
 
   <div class="studies-container">
     <% studies?.forEach((study, index) => { %>
@@ -57,48 +57,4 @@
   </div>
 </div>
 
-<%- include("partials/footer") %>
-
-<script>
-  const modal = document.getElementById("studyModal");
-  const addBtn = document.getElementById("addStudyBtn");
-  const closeBtn = modal.querySelector(".close");
-  const form = document.getElementById("studyForm");
-  const modalTitle = document.getElementById("modalTitle");
-
-  const studyName = document.getElementById("studyName");
-  const studyDegree = document.getElementById("studyDegree");
-  const studyStart = document.getElementById("studyStart");
-  const studyEnd = document.getElementById("studyEnd");
-  const studyDescription = document.getElementById("studyDescription");
-  const studyIndex = document.getElementById("studyIndex");
-
-  addBtn.onclick = () => {
-    modalTitle.textContent = "Add Study";
-    studyName.value = "";
-    studyDegree.value = "";
-    studyStart.value = "";
-    studyEnd.value = "";
-    studyDescription.value = "";
-    studyIndex.value = "";
-    modal.style.display = "block";
-  }
-
-  closeBtn.onclick = () => modal.style.display = "none";
-  window.onclick = (e) => { if(e.target === modal) modal.style.display = "none"; }
-
-  document.querySelectorAll(".btn-edit").forEach(btn => {
-    btn.onclick = () => {
-      const index = btn.dataset.index;
-      const study = <%- JSON.stringify(studies) %>[index];
-      modalTitle.textContent = "Edit Study";
-      studyName.value = study.educationName;
-      studyDegree.value = study.degree || "";
-      studyStart.value = study.startDate ? study.startDate.slice(0,7) : ""; // YYYY-MM
-      studyEnd.value = study.endDate ? study.endDate.slice(0,7) : ""; // YYYY-MM
-      studyDescription.value = study.description || "";
-      studyIndex.value = index;
-      modal.style.display = "block";
-    }
-  });
-</script>
+<%- include("../partials/footer") %>

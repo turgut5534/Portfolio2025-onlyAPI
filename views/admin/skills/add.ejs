@@ -1,0 +1,18 @@
+<%- include("../partials/header") %>
+<%- include("../partials/sidebar") %>
+
+<div class="content" id="content">
+  <h1>Add New Skill</h1>
+
+  <form action="/admin/skills/create" method="POST">
+    
+    <div class="form-group">
+      <label>Skill Name</label>
+      <input type="text" name="name" required>
+    </div>
+
+    <button type="submit" class="btn-add">Add Skill</button>
+  </form>
+</div>
+
+<%- include("../partials/footer") %>

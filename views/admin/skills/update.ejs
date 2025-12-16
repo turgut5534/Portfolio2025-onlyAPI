@@ -1,0 +1,19 @@
+<%- include("../partials/header") %>
+<%- include("../partials/sidebar") %>
+
+<div class="content" id="content">
+  <h1>Edit Skill (<%= skill.name%>)</h1>
+
+  <form action="/admin/skills/update" method="POST">
+    
+    <div class="form-group">
+        <input type="hidden" name="skill_id" value="<%= skill.id %>">
+      <label>Skill Name</label>
+      <input type="text" name="name" value="<%= skill.name %>" required>
+    </div>
+
+    <button type="submit" class="btn-add">Update Skill</button>
+  </form>
+</div>
+
+<%- include("../partials/footer") %>

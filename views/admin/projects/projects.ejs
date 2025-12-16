@@ -1,10 +1,10 @@
-<%- include("partials/header") %>
-<%- include("partials/sidebar") %>
+<%- include("../partials/header") %>
+<%- include("../partials/sidebar") %>
 
 <div class="content" id="content">
   <h1>Projects</h1>
 
-  <button class="btn-add" id="addProjectBtn">+ Add Project</button>
+  <a class="btn-add" href="/admin/projects/add" id="addProjectBtn">+ Add Project</a>
 
   <div class="projects-container">
     <% projects?.forEach((project, index) => { %>
@@ -73,54 +73,4 @@
   </div>
 </div>
 
-<%- include("partials/footer") %>
-
-<script>
-  const projectModal = document.getElementById("projectModal");
-  const addProjectBtn = document.getElementById("addProjectBtn");
-  const closeProjectBtn = projectModal.querySelector(".close");
-  const projectForm = document.getElementById("projectForm");
-  const modalProjectTitle = document.getElementById("modalProjectTitle");
-
-  const projTitle = document.getElementById("projTitle");
-  const projShortDesc = document.getElementById("projShortDesc");
-  const projLongDesc = document.getElementById("projLongDesc");
-  const projCover = document.getElementById("projCover");
-  const projGitHub = document.getElementById("projGitHub");
-  const projLive = document.getElementById("projLive");
-  const projFeatured = document.getElementById("projFeatured");
-  const projectIndex = document.getElementById("projectIndex");
-
-  addProjectBtn.onclick = () => {
-    modalProjectTitle.textContent = "Add Project";
-    projTitle.value = "";
-    projShortDesc.value = "";
-    projLongDesc.value = "";
-    projCover.value = "";
-    projGitHub.value = "";
-    projLive.value = "";
-    projFeatured.checked = false;
-    projectIndex.value = "";
-    projectModal.style.display = "block";
-  }
-
-  closeProjectBtn.onclick = () => projectModal.style.display = "none";
-  window.onclick = (e) => { if(e.target === projectModal) projectModal.style.display = "none"; }
-
-  document.querySelectorAll(".btn-edit").forEach(btn => {
-    btn.onclick = () => {
-      const index = btn.dataset.index;
-      const project = <%- JSON.stringify(projects) %>[index];
-      modalProjectTitle.textContent = "Edit Project";
-      projTitle.value = project.title;
-      projShortDesc.value = project.shortDescription;
-      projLongDesc.value = project.longDescription || "";
-      projCover.value = project.coverImageUrl || "";
-      projGitHub.value = project.githubUrl || "";
-      projLive.value = project.liveUrl || "";
-      projFeatured.checked = project.isFeatured || false;
-      projectIndex.value = index;
-      projectModal.style.display = "block";
-    }
-  });
-</script>
+<%- include("../partials/footer") %>

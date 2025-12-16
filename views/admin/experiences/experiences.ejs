@@ -1,10 +1,10 @@
-<%- include("partials/header") %>
-<%- include("partials/sidebar") %>
+<%- include("../partials/header") %>
+<%- include("../partials/sidebar") %>
 
 <div class="content" id="content">
   <h1>User Experiences</h1>
 
-  <button class="btn-add" id="addExperienceBtn">+ Add Experience</button>
+  <a class="btn-add" href="/admin/experiences/add" id="addExperienceBtn">+ Add Experience</a>
 
 <div class="experiences-container">
   <% experiences?.forEach((exp, index) => { %>
@@ -12,7 +12,7 @@
       <div class="experience-header">
         <h3><%= exp.position %> at <%= exp.companyName %></h3>
         <div>
-          <button class="btn-edit" data-index="<%= index %>">Edit</button>
+          <a class="btn-edit" href="/admin/experiences/edit/<%=exp.id%>">Edit</a>
           <form action="/admin/experience/delete/<%= exp.id %>" method="POST" style="display:inline;">
             <button class="btn-delete" type="submit">Delete</button>
           </form>
@@ -77,48 +77,4 @@
   </div>
 </div>
 
-<%- include("partials/footer") %>
-
-<script>
-  const modal = document.getElementById("experienceModal");
-  const addBtn = document.getElementById("addExperienceBtn");
-  const closeBtn = modal.querySelector(".close");
-  const form = document.getElementById("experienceForm");
-  const modalTitle = document.getElementById("modalTitle");
-
-  const expTitle = document.getElementById("expTitle");
-  const expCompany = document.getElementById("expCompany");
-  const expStart = document.getElementById("expStart");
-  const expEnd = document.getElementById("expEnd");
-  const expDescription = document.getElementById("expDescription");
-  const expIndex = document.getElementById("experienceIndex");
-
-  addBtn.onclick = () => {
-    modalTitle.textContent = "Add Experience";
-    expTitle.value = "";
-    expCompany.value = "";
-    expStart.value = "";
-    expEnd.value = "";
-    expDescription.value = "";
-    expIndex.value = "";
-    modal.style.display = "block";
-  }
-
-  closeBtn.onclick = () => modal.style.display = "none";
-  window.onclick = (e) => { if(e.target === modal) modal.style.display = "none"; }
-
-  document.querySelectorAll(".btn-edit").forEach(btn => {
-    btn.onclick = () => {
-      const index = btn.dataset.index;
-      const experience = <%- JSON.stringify(experiences) %>[index];
-      modalTitle.textContent = "Edit Experience";
-      expTitle.value = experience.companyName;
-      expCompany.value = experience.position;
-      expStart.value = experience.startDate;
-      expEnd.value = experience.endDate || "";
-      expDescription.value = experience.description;
-      expIndex.value = index;
-      modal.style.display = "block";
-    }
-  });
-</script>
+<%- include("../partials/footer") %>
