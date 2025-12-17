@@ -755,6 +755,30 @@ router.post('/upload/profile', upload.single('file'), async (req, res) => {
   }
 });
 
+router.post('/upload/cv', upload.single('file'), async (req, res) => {
+  try {
+    const form = new FormData();
+    form.append('file', fs.createReadStream(req.file.path), {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype, // preserves MIME type
+    });
+
+    await axios.post(`${url}/upload/cv`, form, {
+      headers: {
+        ...form.getHeaders(),
+        Authorization: `Bearer ${req.session.token}`,
+      },
+    });
+
+    fs.unlinkSync(req.file.path); // delete temp file
+    res.redirect('/admin/profile');
+  } catch (e) {
+    console.error(e.response?.data || e);
+    res.redirect('/admin/login');
+  }
+});
+
+
 
 router.post('/projects/create', upload.single('file'), async (req, res) => {
   try {
