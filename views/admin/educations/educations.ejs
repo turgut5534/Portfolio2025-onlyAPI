@@ -11,7 +11,22 @@
       <div class="study-item">
         <div class="study-header">
           <h3><%= study.educationName %> <%= study.degree ? '(' + study.degree + ')' : '' %></h3>
-          <div>
+       
+        </div>
+        <p class="study-duration">
+          <% 
+            const start = new Date(study.startDate);
+            const end = study.endDate ? new Date(study.endDate) : null;
+
+            const options = { year: 'numeric', month: 'long' };
+            const startFormatted = !isNaN(start) ? start.toLocaleDateString('en-US', options) : '';
+            const endFormatted = end && !isNaN(end) ? end.toLocaleDateString('en-US', options) : 'Present';
+          %>
+          <%= startFormatted %> - <%= endFormatted %>
+        </p>
+        
+        <p class="study-description"><%= study.description %></p>
+           <div>
             <a class="btn-edit" href="/admin/educations/edit/<%=study.id%>">Edit</a>
            <a href="#" 
    class="btn-delete" 
@@ -25,20 +40,8 @@
 </a>
 
           </div>
-        </div>
-        <p class="study-duration">
-          <% 
-            const start = new Date(study.startDate);
-            const end = study.endDate ? new Date(study.endDate) : null;
-
-            const options = { year: 'numeric', month: 'long' };
-            const startFormatted = !isNaN(start) ? start.toLocaleDateString('en-US', options) : '';
-            const endFormatted = end && !isNaN(end) ? end.toLocaleDateString('en-US', options) : 'Present';
-          %>
-          <%= startFormatted %> - <%= endFormatted %>
-        </p>
-        <p class="study-description"><%= study.description %></p>
       </div>
+      
     <% }) %>
   </div>
 </div>

@@ -14,20 +14,7 @@
           <% if(project.coverImageUrl) { %>
           <img  style="max-width: 200px; margin-bottom: 10px;" src="<%= url %>/uploads/images/<%= project.coverImageUrl %>" alt="<%= project.title %> Cover" class="project-cover">
         <% } %>
-          <div>
-            <a class="btn-edit" href="/admin/projects/edit/<%= project.id%>">Edit</a>
-        <a href="#" 
-   class="btn-delete" 
-   onclick="if(confirm('Are you sure you want to delete this project?')) { 
-              fetch('/admin/project/delete/<%= project.id %>', { method: 'POST' })
-                .then(() => location.reload())
-                .catch(err => alert('Error deleting project'));
-            } 
-            return false;">
-   Delete
-</a>
-
-          </div>
+       
         </div>
         
         <p class="project-short-description"><%= project.shortDescription %></p>
@@ -42,7 +29,22 @@
             <a href="<%= project.liveUrl %>" target="_blank">Live</a>
           <% } %>
         </div>
+           <div style="margin-top: 1rem;">
+            <a class="btn-edit" href="/admin/projects/edit/<%= project.id%>">Edit</a>
+        <a href="#" 
+   class="btn-delete" 
+   onclick="if(confirm('Are you sure you want to delete this project?')) { 
+              fetch('/admin/project/delete/<%= project.id %>', { method: 'POST' })
+                .then(() => location.reload())
+                .catch(err => alert('Error deleting project'));
+            } 
+            return false;">
+   Delete
+</a>
+
+          </div>
       </div>
+      
     <% }) %>
   </div>
 
