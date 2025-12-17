@@ -1,0 +1,39 @@
+<%- include("../partials/header") %>
+<%- include("../partials/sidebar") %>
+
+<div class="content" id="content">
+  <h1>Users</h1>
+
+  <a class="btn-add" href="/admin/users/add">+ Add User</a>
+
+  <div class="experiences-container">
+    <% admins?.forEach((admin) => { %>
+      <div class="experience-item">
+        <div class="experience-header">
+        <h3><%= admin.profile ? admin.profile.fullName : '' %></h3>
+          <div>
+            <a class="btn-edit" href="/admin/users/edit/<%= admin.id %>">Edit</a>
+
+            <a href="#"
+               class="btn-delete"
+               onclick="if(confirm('Are you sure you want to delete this user?')) {
+                 fetch('/admin/users/delete/<%= admin.id %>', { method: 'POST' })
+                   .then(() => location.reload())
+                   .catch(() => alert('Error deleting user'));
+               }
+               return false;">
+              Delete
+            </a>
+          </div>
+        </div>
+
+        <p class="experience-description">
+          <strong>Email:</strong> <%= admin.email %>
+          <p>Role: <%= admin.role %></p>
+        </p>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<%- include("../partials/footer") %>

@@ -6,6 +6,9 @@ const FormData = require('form-data');
 const fs = require('fs');
 const axios = require('axios');
 const tempAuth = require('../middlewares/temp-token')
+const fetchUser = require('../middlewares/admin-info')
+
+router.use(fetchUser)
 
 // router.use(tempAuth)
 
@@ -53,7 +56,7 @@ router.post('/login', async (req, res) => {
 
     res.redirect('/admin/dashboard');
   } catch(e) {
-    // console.error(e);
+    console.error(e);
     res.redirect('/admin/login');
   }
 });
@@ -71,7 +74,7 @@ router.get('/dashboard', async(req,res) => {
         
          res.render('admin/dashboard')
     } catch(e) {
-        // console.log(e)
+        console.log(e)
         res.redirect('/admin/login')
     }
 
@@ -133,6 +136,41 @@ router.get('/educations/add', (req,res) => {
 
 
 //EDIT TEMPLATES
+
+router.get('/users', async (req,res) => {
+    try {
+        
+        const response = await axios.get(`${url}/admin/all`, {
+            headers: {
+                Authorization: `Bearer ${req.session.token}`
+            }
+        });
+
+        res.render('admin/users/users', {admins: response.data})
+
+    } catch(e) {
+        console.log(e)
+    }
+   
+})
+
+router.get('/users/edit/:id', async (req,res) => {
+    try {
+        
+        const response = await axios.get(`${url}/admin/users/${req.params.id}`, {
+            headers: {
+                Authorization: `Bearer ${req.session.token}`
+            }
+        });
+
+        res.render('admin/users/edit', {admin: response.data})
+
+    } catch(e) {
+        console.log(e)
+    }
+   
+})
+
 
 router.get('/experience/edit/:id', async (req,res) => {
     try {
