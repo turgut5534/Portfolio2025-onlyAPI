@@ -63,7 +63,8 @@ router.post('/login', async (req, res) => {
       password: req.body.password
     });
 
-    req.session.token = response.data.accessToken; 
+    req.session.token = response.data.accessToken;
+    req.session.success ='Log in successful' 
 
     res.redirect('/admin/dashboard');
   } catch(e) {
@@ -97,7 +98,13 @@ router.get('/dashboard', async(req,res) => {
             }
         });
         
-         res.render('admin/dashboard')
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
+        
+         res.render('admin/dashboard', {success, error})
     } catch(e) {
         console.log(e)
         res.redirect('/admin/login')
@@ -880,7 +887,6 @@ router.get('/logout', (req, res) => {
 
     // clear cookie (important)
     res.clearCookie('connect.sid');
-    req.session.success = 'Logout is successful'
     res.redirect('/admin/login');
   });
 });
