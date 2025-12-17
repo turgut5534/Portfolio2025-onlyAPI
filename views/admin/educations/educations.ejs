@@ -13,9 +13,17 @@
           <h3><%= study.educationName %> <%= study.degree ? '(' + study.degree + ')' : '' %></h3>
           <div>
             <a class="btn-edit" href="/admin/educations/edit/<%=study.id%>">Edit</a>
-            <form action="/admin/education/delete/<%= study.id %>" method="POST" style="display:inline;">
-              <button class="btn-delete" type="submit" onclick="return confirm('Are you sure you want to delete this skill?');">Delete</button>
-            </form>
+           <a href="#" 
+   class="btn-delete" 
+   onclick="if(confirm('Are you sure you want to delete this education?')) { 
+              fetch('/admin/education/delete/<%= study.id %>', { method: 'POST' })
+                .then(() => location.reload())
+                .catch(err => alert('Error deleting education'));
+            } 
+            return false;">
+   Delete
+</a>
+
           </div>
         </div>
         <p class="study-duration">

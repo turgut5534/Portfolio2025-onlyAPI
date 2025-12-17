@@ -768,20 +768,24 @@ router.post('/projects/create', upload.single('file'), async (req, res) => {
 
     const projectId = response.data.id
 
-    const form = new FormData();
-    form.append('file', fs.createReadStream(req.file.path), {
-      filename: req.file.originalname,
-      contentType: req.file.mimetype, // preserves MIME type
-    });
+    if(req.file) {
+        const form = new FormData();
+        form.append('file', fs.createReadStream(req.file.path), {
+        filename: req.file.originalname,
+        contentType: req.file.mimetype, // preserves MIME type
+        });
 
-    await axios.post(`${url}/upload/projects/cover/${projectId}`, form, {
-      headers: {
-        ...form.getHeaders(),
-        Authorization: `Bearer ${req.session.token}`,
-      },
-    });
+        await axios.post(`${url}/upload/projects/cover/${projectId}`, form, {
+        headers: {
+            ...form.getHeaders(),
+            Authorization: `Bearer ${req.session.token}`,
+        },
+        });
 
-    fs.unlinkSync(req.file.path); // delete temp file
+        fs.unlinkSync(req.file.path); // delete temp file
+    }
+
+   
     res.redirect('/admin/projects');
   } catch (e) {
     console.error(e.response?.data || e);

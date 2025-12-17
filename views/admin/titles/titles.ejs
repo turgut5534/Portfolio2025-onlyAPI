@@ -15,9 +15,17 @@
           </div>
           <div class="skill-actions">
             <a href="/admin/titles/edit/<%=title.id%>" class="btn btn-edit")">Edit</a>
-            <form action="/admin/titles/delete/<%= title.id %>" method="POST" style="display:inline;">
-              <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this skill?');">Delete</button>
-            </form>
+            <a href="#" 
+   class="btn btn-delete" 
+   onclick="if(confirm('Are you sure you want to delete this skill?')) { 
+              fetch('/admin/titles/delete/<%= title.id %>', { method: 'POST' })
+                .then(() => location.reload())
+                .catch(err => alert('Error deleting skill'));
+            } 
+            return false;">
+   Delete
+</a>
+
           </div>
         </div>
       <% }) %>
