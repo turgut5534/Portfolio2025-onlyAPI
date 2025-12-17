@@ -508,3 +508,55 @@
   margin-left: 0.5rem;
 }
 
+.profile-info-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: 20px 0 30px;
+  max-width: 100%;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.profile-info-card .info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-info-card .info-row:last-child {
+  border-bottom: none;
+}
+
+.profile-info-card .label {
+  font-size: 14px;
+  color: #777;
+  font-weight: 500;
+}
+
+.profile-info-card .value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ROLE BADGES */
+.profile-info-card .role {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Role colors */
+.profile-info-card .role.admin {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.profile-info-card .role.user {
+  background: #e8f5e9;
+  color: #2e7d32;
+}

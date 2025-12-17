@@ -10,7 +10,7 @@ const fetchUser = require('../middlewares/admin-info')
 
 router.use(fetchUser)
 
-router.use(tempAuth)
+// router.use(tempAuth)
 
 const url = process.env.API_URL
 
