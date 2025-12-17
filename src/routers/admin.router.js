@@ -7,7 +7,7 @@ const fs = require('fs');
 const axios = require('axios');
 const tempAuth = require('../middlewares/temp-token')
 
-router.use(tempAuth)
+// router.use(tempAuth)
 
 const url = process.env.API_URL
 
