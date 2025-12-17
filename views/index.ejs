@@ -16,7 +16,9 @@
           <li><a href="#about">About</a></li>
           <li><a href="#resume">Resume</a></li>
           <li><a href="#portfolio">Portfolio</a></li>
+           <% if(user.settings.allow_contact) { %>
           <li><a href="#contact">Contact</a></li>
+          <%}%>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -198,14 +200,10 @@
 
                 <% user.experiences.forEach((experience) => { %>
                   <div class="exp-card" data-aos="zoom-in" data-aos-delay="350">
-                    <div class="card-header">
-                      <div class="company-logo">
-                        <i class="bi bi-laptop"></i>
-                      </div>
-                    </div>
+               
                     <div class="card-body">
                       <h3><%= experience.position %></h3>
-                      <p class="company-name"><%= experience.company %></p>
+                      <p class="company-name"><%= experience.companyName %></p>
                       <span class="duration">
                         <%= new Date(experience.startDate).toLocaleString('en-US', { month: 'long', year: 'numeric' }) %> - 
                         <%= new Date(experience.endDate).toLocaleString('en-US', { month: 'long', year: 'numeric' }) %>
@@ -250,7 +248,7 @@
                       <span class="degree-level"><%= edu.degree || 'Bachelor' %></span>
                     </div>
                     <h4><%= edu.educationName %></h4>
-                    <p class="institution"><%= edu.institution || 'Creative Arts University' %></p>
+                    <p class="institution"><%= edu.educationName %></p>
                     <p class="description"><%= edu.description %></p>
                   </div>
                 </div>
