@@ -10,7 +10,7 @@ const fetchUser = require('../middlewares/admin-info')
 
 router.use(fetchUser)
 
-// router.use(tempAuth)
+router.use(tempAuth)
 
 const url = process.env.API_URL
 
@@ -23,8 +23,14 @@ router.get('/settings', async (req,res) => {
                 Authorization: `Bearer ${req.session.token}`
             }
         });
+
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
         
-        res.render('admin/settings', {settings: response.data})
+        res.render('admin/settings', {settings: response.data, success, error})
 
     } catch(e) {
         console.log(e)
@@ -37,7 +43,12 @@ router.get('/settings', async (req,res) => {
 router.get('/login', async(req,res) => {
 
     try {
-         res.render('admin/login')
+      
+        const error = req.session.error
+        req.session.error = null
+
+        res.render('admin/login', {error})
+
     } catch(e) {
         console.log(e)
     }
@@ -56,7 +67,21 @@ router.post('/login', async (req, res) => {
 
     res.redirect('/admin/dashboard');
   } catch(e) {
-    console.error(e);
+
+     let errorMessage = "Something went wrong";
+
+    if (e.response && e.response.data) {
+        if (Array.isArray(e.response.data.message)) {
+            errorMessage = e.response.data.message.join(', ');
+        } else if (e.response.data.message) {
+            errorMessage = e.response.data.message;
+        } else if (e.response.data.error) {
+            errorMessage = e.response.data.error;
+        }
+    }
+
+    req.session.error = errorMessage
+
     res.redirect('/admin/login');
   }
 });
@@ -93,8 +118,14 @@ router.get('/profile', async(req,res) => {
         if(!response.data.profile) {
             return res.redirect('/admin/profile/add')
         }
+
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
         
-         res.render('admin/profile-info', {user: response.data, websiteUrl: url})
+         res.render('admin/profile-info', {user: response.data, websiteUrl: url, success, error})
     } catch(e) {
         console.log(e)
         res.redirect('/admin/login')
@@ -107,30 +138,92 @@ router.get('/profile', async(req,res) => {
 //ADD TEMPLATES
 
 router.get('/profile/add', (req,res) => {
-    res.render('admin/profile-create')
+
+    const success = req.session.success
+    req.session.success = null
+
+    const error = req.session.error
+    req.session.error = null
+
+    res.render('admin/profile-create', {success,error})
 })
 
 router.get('/experiences/add', (req,res) => {
-    res.render('admin/experiences/add')
+
+    const success = req.session.success
+    req.session.success = null
+
+    const error = req.session.error
+    req.session.error = null
+
+    res.render('admin/experiences/add', {success,error})
 })
 
 router.get('/projects/add', (req,res) => {
-    res.render('admin/projects/add')
+
+    const success = req.session.success
+    req.session.success = null
+
+    const error = req.session.error
+    req.session.error = null
+
+    res.render('admin/projects/add', {success,error})
 })
 
 router.get('/skills/add', (req,res) => {
-    res.render('admin/skills/add')
+
+    const success = req.session.success
+    req.session.success = null
+
+    const error = req.session.error
+    req.session.error = null
+
+    res.render('admin/skills/add', {success, error})
 })
 
 router.get('/titles/add', (req,res) => {
-    res.render('admin/titles/add')
+
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
+
+    res.render('admin/titles/add', {success,error})
 })
 
 router.get('/educations/add', (req,res) => {
-    res.render('admin/educations/add')
+
+    const success = req.session.success
+    req.session.success = null
+
+    const error = req.session.error
+    req.session.error = null
+
+    res.render('admin/educations/add', {success,error})
 })
 
+router.get('/users/add', async (req, res) => {
+    try {
+        
+        const success = req.session.success
+        req.session.success = null
 
+        const error = req.session.error
+        req.session.error = null
+
+        const data = req.session.data || null
+
+        res.render('admin/users/add', {
+            error,
+            data,
+            success
+        });
+
+    } catch (e) {
+        res.redirect('/admin/login')
+    }
+});
 
 
 
@@ -146,13 +239,55 @@ router.get('/users', async (req,res) => {
             }
         });
 
-        res.render('admin/users/users', {admins: response.data})
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
+
+        res.render('admin/users/users', {admins: response.data, success, error})
 
     } catch(e) {
         console.log(e)
+        res.redirect('/admin/login')
     }
    
 })
+
+router.post('/users/add', async (req, res) => {
+    try {
+        await axios.post(`${url}/admin/save`, req.body, {
+            headers: { Authorization: `Bearer ${req.session.token}` }
+        });
+
+
+        req.session.data = null
+
+        req.session.success = 'The user was added successfully'
+        res.redirect('/admin/users');
+
+    } catch (e) {
+        let errorMessage = "Something went wrong";
+
+        if (e.response && e.response.data) {
+            if (Array.isArray(e.response.data.message)) {
+                errorMessage = e.response.data.message.join(', ');
+            } else if (e.response.data.message) {
+                errorMessage = e.response.data.message;
+            } else if (e.response.data.error) {
+                errorMessage = e.response.data.error;
+            }
+        }
+
+        // Save error in session
+        req.session.error = errorMessage;
+        req.session.data = req.body
+
+        // Redirect back to the add user page
+        res.redirect('/admin/users/add');
+    }
+});
+
 
 router.get('/users/edit/:id', async (req,res) => {
     try {
@@ -171,6 +306,39 @@ router.get('/users/edit/:id', async (req,res) => {
    
 })
 
+router.post('/users/delete/:id', async (req,res) => {
+    try {
+        
+        const response = await axios.delete(`${url}/admin/delete/${req.params.id}`, {
+            headers: {
+                Authorization: `Bearer ${req.session.token}`
+            }
+        });
+
+        req.session.success = 'The user was deleted successfully'
+
+        res.redirect('/admin/users')
+
+    } catch(e) {
+
+        let errorMessage = "Something went wrong";
+
+        if (e.response && e.response.data) {
+            if (Array.isArray(e.response.data.message)) {
+                errorMessage = e.response.data.message.join(', ');
+            } else if (e.response.data.message) {
+                errorMessage = e.response.data.message;
+            } else if (e.response.data.error) {
+                errorMessage = e.response.data.error;
+            }
+        }
+
+
+        req.session.error = errorMessage
+    }
+   
+})
+
 
 router.get('/experience/edit/:id', async (req,res) => {
     try {
@@ -181,7 +349,13 @@ router.get('/experience/edit/:id', async (req,res) => {
             }
         });
 
-        res.render('admin/experiences/edit', {experience: response.data})
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
+
+        res.render('admin/experiences/edit', {experience: response.data, success,error})
 
     } catch(e) {
 
@@ -198,7 +372,13 @@ router.get('/projects/edit/:id', async (req,res) => {
             }
         });
 
-        res.render('admin/projects/edit', {project: response.data, url})
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
+
+        res.render('admin/projects/edit', {project: response.data, url, success,error})
 
     } catch(e) {
 
@@ -215,7 +395,13 @@ router.get('/skills/edit/:id', async (req,res) => {
             }
         });
 
-        res.render('admin/skills/update', {skill: response.data})
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
+
+        res.render('admin/skills/update', {skill: response.data, success,error})
 
     } catch(e) {
 
@@ -232,7 +418,13 @@ router.get('/titles/edit/:id', async (req,res) => {
             }
         });
 
-        res.render('admin/titles/edit', {title: response.data})
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
+
+        res.render('admin/titles/edit', {title: response.data, success,error})
 
     } catch(e) {
 
@@ -248,8 +440,14 @@ router.get('/educations/edit/:id', async (req,res) => {
                 Authorization: `Bearer ${req.session.token}`
             }
         });
+        
+        const success = req.session.success
+        req.session.success = null
 
-        res.render('admin/educations/edit', {education: response.data})
+        const error = req.session.error
+        req.session.error = null
+
+        res.render('admin/educations/edit', {education: response.data, success, error})
 
     } catch(e) {
 
@@ -273,8 +471,14 @@ router.get('/titles', async(req,res) => {
                 Authorization: `Bearer ${req.session.token}`
             }
         });
+
+         const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
         
-         res.render('admin/titles/titles', {titles: response.data})
+         res.render('admin/titles/titles', {titles: response.data, success, error})
 
     } catch(e) {
         console.log(e)
@@ -294,8 +498,14 @@ router.get('/skills', async(req,res) => {
                 Authorization: `Bearer ${req.session.token}`
             }
         });
+
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
         
-         res.render('admin/skills/skills', {skills: response.data})
+         res.render('admin/skills/skills', {skills: response.data, success, error})
 
     } catch(e) {
         console.log(e)
@@ -333,8 +543,14 @@ router.get('/educations', async(req,res) => {
                 Authorization: `Bearer ${req.session.token}`
             }
         });
-        
-         res.render('admin/educations/educations', {studies: response.data})
+
+         const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
+
+         res.render('admin/educations/educations', {studies: response.data, success, error})
 
     } catch(e) {
         console.log(e)
@@ -352,8 +568,14 @@ router.get('/projects', async(req,res) => {
                 Authorization: `Bearer ${req.session.token}`
             }
         });
+
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
         
-         res.render('admin/projects/projects', {projects: response.data, url})
+         res.render('admin/projects/projects', {projects: response.data, url, success, error})
 
     } catch(e) {
         console.log(e)
@@ -366,13 +588,19 @@ router.get('/experiences', async(req,res) => {
 
     try {
 
-        const response = await axios.get(`${url}/admin/dashboard`, {
+        const response = await axios.get(`${url}/portfolio/experiences`, {
             headers: {
                 Authorization: `Bearer ${req.session.token}`
             }
         });
+
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
         
-         res.render('admin/experiences/experiences', response.data)
+         res.render('admin/experiences/experiences',  {experiences: response.data, success, error})
     } catch(e) {
         console.log(e)
         res.redirect('/admin/login')
@@ -394,7 +622,7 @@ router.post('/profile/create', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        req.session.success = 'Profile created successfully'
 
         res.redirect('/admin/profile');
   } catch(e) {
@@ -415,7 +643,7 @@ router.post('/skills/create', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        req.session.success = 'Skill created successfully'
 
         res.redirect('/admin/skills');
   } catch(e) {
@@ -435,7 +663,7 @@ router.post('/titles/create', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        req.session.success = 'The title was created successfully'
 
         res.redirect('/admin/titles');
   } catch(e) {
@@ -455,7 +683,7 @@ router.post('/experience/create', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        req.session.success = 'Experience created successfully'
 
         res.redirect('/admin/experiences');
   } catch(e) {
@@ -475,7 +703,7 @@ router.post('/education/create', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        req.session.success = 'Education created successfully'
 
         res.redirect('/admin/educations');
   } catch(e) {
@@ -495,6 +723,7 @@ router.post('/skills/update', async (req, res) => {
             }
         });
 
+        req.session.success = 'Skill updated successfully'
         res.redirect('/admin/skills');
   } catch(e) {
       console.error('Axios error:', e.response?.status, e.response?.data, e.message);
@@ -512,6 +741,8 @@ router.post('/titles/update', async (req, res) => {
                 Authorization: `Bearer ${req.session.token}` // if your API needs a token
             }
         });
+
+        req.session.success = 'The title was updated successfully'
 
         res.redirect('/admin/titles');
   } catch(e) {
@@ -532,6 +763,7 @@ router.post('/education/update/:id', async (req, res) => {
             }
         });
 
+        req.session.success = 'The education was updated successfully'
         res.redirect('/admin/educations');
   } catch(e) {
       console.log(e)
@@ -552,6 +784,7 @@ router.post('/experience/update/:id', async (req, res) => {
             }
         });
 
+        req.session.success = 'The experience was updated successfully'
         res.redirect('/admin/experiences');
   } catch(e) {
       console.log(e)
@@ -573,7 +806,7 @@ router.post('/project/delete/:id', async (req, res) => {
             }
         });
 
-
+        req.session.success = 'The project was deleted successfully'
         res.redirect('/admin/projects');
   } catch(e) {
       console.error('Axios error:', e.response?.status, e.response?.data, e.message);
@@ -585,15 +818,14 @@ router.post('/settings/update', async (req, res) => {
 
     try {
         const newUrl= `${url}/portfolio/settings/${req.body.settings_id}`
-        console.log(newUrl)
-        console.log(req.session.token)
+
         const response = await axios.patch( newUrl,req.body,{
             headers: {
                 Authorization: `Bearer ${req.session.token}` // if your API needs a token
             }
         });
 
-
+        req.session.success = 'Settings updated successfully'
         res.redirect('/admin/settings');
   } catch(e) {
       console.error('Axios error:', e.response?.status, e.response?.data, e.message);
@@ -613,7 +845,7 @@ router.post('/experience/delete/:id', async (req, res) => {
             }
         });
 
-
+        req.session.success = 'Experience deleted successfully'
         res.redirect('/admin/experiences');
   } catch(e) {
       console.error('Axios error:', e.response?.status, e.response?.data, e.message);
@@ -632,7 +864,7 @@ router.post('/education/delete/:id', async (req, res) => {
             }
         });
 
-
+        req.session.success = 'Education deleted successfully'
         res.redirect('/admin/educations');
   } catch(e) {
       console.error('Axios error:', e.response?.status, e.response?.data, e.message);
@@ -648,6 +880,7 @@ router.get('/logout', (req, res) => {
 
     // clear cookie (important)
     res.clearCookie('connect.sid');
+    req.session.success = 'Logout is successful'
     res.redirect('/admin/login');
   });
 });
@@ -663,7 +896,7 @@ router.post('/experiences', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        req.session.success = 'Experience created successfully'
 
         res.redirect('/admin/experiences');
   } catch(e) {
@@ -684,7 +917,7 @@ router.post('/projects', async (req, res) => {
             }
         });
 
-        
+        req.session.success = 'Porject created successfully'
 
         res.redirect('/admin/projects');
   } catch(e) {
@@ -704,7 +937,7 @@ router.post('/skills', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        req.session.success = 'Project created successfully'
 
         res.redirect('/admin/skills');
   } catch(e) {
@@ -726,7 +959,7 @@ router.post('/educations', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        req.session.success = 'Education created successfully'
 
         res.redirect('/admin/educations');
   } catch(e) {
@@ -747,7 +980,7 @@ router.post('/skills/delete/:id', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        req.session.success = 'Skill deleted successfully'
 
         res.redirect('/admin/skills');
   } catch(e) {
@@ -768,7 +1001,7 @@ router.post('/titles/delete/:id', async (req, res) => {
             }
         });
 
-        console.log(response.data)
+        req.session.success = 'Title deleted successfully'
 
         res.redirect('/admin/titles');
   } catch(e) {
@@ -789,7 +1022,7 @@ router.post('/profile/:id', async (req, res) => {
     }
     });
 
-    console.log(response.data)
+    req.session.success = 'The profile was updated successfully'
 
     res.redirect('/admin/profile');
   } catch(e) {
@@ -815,9 +1048,12 @@ router.post('/upload/profile', upload.single('file'), async (req, res) => {
     });
 
     fs.unlinkSync(req.file.path); // delete temp file
+
+    req.session.success = 'Profile photo was changed successfully'
     res.redirect('/admin/profile');
   } catch (e) {
     console.error(e.response?.data || e);
+    req.session.error = e.response
     res.redirect('/admin/login');
   }
 });
@@ -838,6 +1074,7 @@ router.post('/upload/cv', upload.single('file'), async (req, res) => {
     });
 
     fs.unlinkSync(req.file.path); // delete temp file
+    req.session.success = 'CV was changed successfully'
     res.redirect('/admin/profile');
   } catch (e) {
     console.error(e.response?.data || e);
@@ -872,6 +1109,8 @@ router.post('/projects/create', upload.single('file'), async (req, res) => {
             Authorization: `Bearer ${req.session.token}`,
         },
         });
+
+        req.session.success = 'Project created successfully'
 
         fs.unlinkSync(req.file.path); // delete temp file
     }
@@ -914,6 +1153,8 @@ router.post('/projects/update/:id', upload.single('file'), async (req, res) => {
 
         fs.unlinkSync(req.file.path); // delete temp file
     }
+
+    req.session.success = 'Project updated successfully'
 
   
     res.redirect('/admin/projects');

@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Login</title>
+    <link rel="stylesheet" href="/admin/css/iziToast.min.css">
+  <script src="/admin/js/iziToast.min.js" type="text/javascript"></script>
   <style>
     body {
       margin: 0;
@@ -73,5 +75,22 @@
     </form>
   </div>
 
+
+  <% if (error) { %>
+<script>
+  iziToast.error({
+    title: 'Error',
+    message: <%- JSON.stringify(error) %>,
+    timeout: 5000,
+
+    // CUSTOM SIZE
+    maxWidth:400,       // increase width (default ~350px)
+    titleSize: '24px',   // bigger title font
+    messageSize: '18px', // bigger message font
+    padding: 30,         // more padding inside toast
+    balloon: true,       // optional: makes it more prominent
+  });
+</script>
+<% } %>
 </body>
 </html>

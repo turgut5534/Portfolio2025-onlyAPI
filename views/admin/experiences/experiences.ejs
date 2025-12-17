@@ -43,4 +43,39 @@
 </div>
 
 
+<% if (success) { %>
+<script>
+  iziToast.success({
+    title: 'Success',
+    message: <%- JSON.stringify(success) %>,
+    timeout: 5000,
+
+    // CUSTOM SIZE
+    maxWidth: 500,       // increase width (default ~350px)
+    titleSize: '24px',   // bigger title font
+    messageSize: '18px', // bigger message font
+    padding: 30,         // more padding inside toast
+    balloon: true,       // optional: makes it more prominent
+  });
+</script>
+<% } %>
+
+<% if (error) { %>
+<script>
+  iziToast.error({
+    title: 'Error',
+    message: <%- JSON.stringify(error) %>,
+    timeout: 5000,
+
+    // CUSTOM SIZE
+    maxWidth: 500,       // increase width (default ~350px)
+    titleSize: '24px',   // bigger title font
+    messageSize: '18px', // bigger message font
+    padding: 30,         // more padding inside toast
+    balloon: true,       // optional: makes it more prominent
+  });
+</script>
+<% } %>
+
+
 <%- include("../partials/footer") %>
