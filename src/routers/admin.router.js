@@ -305,7 +305,13 @@ router.get('/users/edit/:id', async (req,res) => {
             }
         });
 
-        res.render('admin/users/edit', {admin: response.data})
+        const success = req.session.success
+        req.session.success = null
+
+        const error = req.session.error
+        req.session.error = null
+
+        res.render('admin/users/edit', {admin: response.data, success,error})
 
     } catch(e) {
         console.log(e)
