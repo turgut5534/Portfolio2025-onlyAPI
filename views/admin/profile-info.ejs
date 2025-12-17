@@ -4,11 +4,12 @@
 <div class="content" id="content">
   <h1>Profile Info</h1>
 
+ <% if (user && user.profile && user.profile.imageUrl) { %>
   <div class="profile-photo">
-    <img src="<%=websiteUrl%>/uploads/images/<%= user.profile.imageUrl %>" alt="Profile Photo">
-    <!-- Add file upload button -->
-   
+    <img src="<%= websiteUrl %>/uploads/images/<%= user.profile.imageUrl %>" alt="Profile Photo">
   </div>
+<% } %>
+
 
    <form action="/admin/upload/profile" method="POST" enctype="multipart/form-data">
       <input type="file" name="file" accept="image/*" required>

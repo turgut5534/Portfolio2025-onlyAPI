@@ -86,6 +86,10 @@ router.get('/profile', async(req,res) => {
                 Authorization: `Bearer ${req.session.token}`
             }
         });
+
+        if(!response.data.profile) {
+            return res.redirect('/admin/profile/add')
+        }
         
          res.render('admin/profile-info', {user: response.data, websiteUrl: url})
     } catch(e) {
@@ -98,6 +102,10 @@ router.get('/profile', async(req,res) => {
 
 
 //ADD TEMPLATES
+
+router.get('/profile/add', (req,res) => {
+    res.render('admin/profile-create')
+})
 
 router.get('/experiences/add', (req,res) => {
     res.render('admin/experiences/add')
@@ -336,6 +344,27 @@ router.get('/experiences', async(req,res) => {
 
 
 //CREATIONS
+
+router.post('/profile/create', async (req, res) => {
+
+    try {
+        
+        const newUrl= `${url}/portfolio/profiles`
+        const response = await axios.post( newUrl, req.body, {
+            headers: {
+                Authorization: `Bearer ${req.session.token}` // if your API needs a token
+            }
+        });
+
+        console.log(response.data)
+
+        res.redirect('/admin/profile');
+  } catch(e) {
+      console.error('Axios error:', e.response?.status, e.response?.data, e.message);
+    res.status(500).send('Error');
+  }
+});
+
 
 router.post('/skills/create', async (req, res) => {
 
