@@ -12,7 +12,7 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="/" class="active">Home</a></li>
+          <li><a class="scroll-link active" href="#hero">Home</a></li>
           <li><a class="scroll-link" href="#about">About</a></li>
           <li><a class="scroll-link" href="#resume">Resume</a></li>
           <li><a class="scroll-link" href="#portfolio">Portfolio</a></li>
@@ -79,6 +79,40 @@
                 <span class="role"><%= user.profile.title %></span>
               </div>
 
+              <!-- Profile Info Grid -->
+            <!-- Profile Info Boxes -->
+            <div class="profile-info-boxes">
+
+
+              <% if (user.profile.email) { %>
+              <div class="info-box">
+                <i class="bi bi-envelope"></i>
+                <span><%= user.profile.email %></span>
+              </div>
+              <% } %>
+
+              <% if (user.profile.phone) { %>
+              <div class="info-box">
+                <i class="bi bi-phone"></i>
+                <span><%= user.profile.phone %></span>
+              </div>
+              <% } %>
+
+              <% if (user.profile.location) { %>
+              <div class="info-box">
+                <i class="bi bi-geo-alt"></i>
+                <span><%= user.profile.location %></span>
+              </div>
+              <% } %>
+
+              <% if (user.profile.degree) { %>
+              <div class="info-box">
+                <i class="bi bi-mortarboard"></i>
+                <span><%= user.profile.degree %></span>
+              </div>
+              <% } %>
+
+            </div>
 
               <div class="profile-actions">
                 <% if (user.profile.cvUrl){ %>
@@ -106,42 +140,6 @@
 
           <div class="col-lg-8" data-aos="fade-left" data-aos-delay="200">
             <div class="content-wrapper">
-
-              <div class="details-grid">
-
-                <div class="detail-item" data-aos="fade-up" data-aos-delay="300">
-                  <i class="bi bi-mortarboard"></i>
-                  <div class="detail-content">
-                    <span>Degree</span>
-                    <strong><%= user.profile.degree%></strong>
-                  </div>
-                </div>
-
-                <div class="detail-item" data-aos="fade-up" data-aos-delay="350">
-                  <i class="bi bi-geo-alt"></i>
-                  <div class="detail-content">
-                    <span>Based In</span>
-                    <strong><%= user.profile.location %></strong>
-                  </div>
-                </div>
-
-                <div class="detail-item" data-aos="fade-up" data-aos-delay="100">
-                  <i class="bi bi-envelope"></i>
-                  <div class="detail-content">
-                    <span>Email</span>
-                    <strong><%= user.profile.email %></strong>
-                  </div>
-                </div>
-
-                <div class="detail-item" data-aos="fade-up" data-aos-delay="150">
-                  <i class="bi bi-phone"></i>
-                  <div class="detail-content">
-                    <span>Phone</span>
-                    <strong><%= user.profile.phone %></strong>
-                  </div>
-                </div>
-
-              </div>
 
               <div class="skills-showcase" data-aos="fade-up" data-aos-delay="250">
                 <div class="section-tag">Core Skills</div>
