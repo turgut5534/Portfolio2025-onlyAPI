@@ -38,7 +38,7 @@
     <% if (user.profile.cvUrl) { %>
   <!-- Show existing CV with a link -->
   <div class="existing-cv">
-    <a href="<%=websiteUrl%>/uploads/cv/<%= user.profile.cvUrl %>"  target="_blank">View current CV</a>
+    <a href="<%=websiteUrl%>/uploads/cv/<%= user.profile.cvUrl %>" data-type="iframe"  data-fancybox="" data-caption="<%= user.profile.cvUrl %>"  target="_blank">View current CV</a>
     <p>If you want to replace it, upload a new file:</p>
   </div>
   <% } %>
