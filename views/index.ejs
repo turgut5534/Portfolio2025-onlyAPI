@@ -12,12 +12,12 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="#hero" class="active">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#resume">Resume</a></li>
-          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="/" class="active">Home</a></li>
+          <li><a class="scroll-link" href="#about">About</a></li>
+          <li><a class="scroll-link" href="#resume">Resume</a></li>
+          <li><a class="scroll-link" href="#portfolio">Portfolio</a></li>
            <% if(user.settings.allow_contact) { %>
-          <li><a href="#contact">Contact</a></li>
+          <li><a class="scroll-link" href="#contact">Contact</a></li>
           <%}%>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
