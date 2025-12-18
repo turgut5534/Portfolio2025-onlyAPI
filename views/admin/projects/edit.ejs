@@ -29,11 +29,13 @@
     <% if (project.coverImageUrl) { %>
       <div class="form-group">
         <label>Current Cover Image</label><br>
+        <a href="<%= url %>/uploads/images/<%= project.coverImageUrl %>" data-fancybox>
         <img
           src="<%=url%>/uploads/images/<%= project.coverImageUrl %>"
           alt="Project Cover"
           style="max-width: 200px; margin-bottom: 10px;"
         >
+        </a>
       </div>
     <% } %>
 

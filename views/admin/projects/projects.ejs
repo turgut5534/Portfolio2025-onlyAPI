@@ -12,7 +12,9 @@
         <div class="project-header">
           <h3><%= project.title %> <% if(project.isFeatured) { %>⭐<% } %></h3>
           <% if(project.coverImageUrl) { %>
+            <a href="<%= url %>/uploads/images/<%= project.coverImageUrl %>" data-fancybox>
           <img  style="max-width: 200px; margin-bottom: 10px;" src="<%= url %>/uploads/images/<%= project.coverImageUrl %>" alt="<%= project.title %> Cover" class="project-cover">
+          </a>
         <% } %>
        
         </div>
@@ -48,40 +50,6 @@
     <% }) %>
   </div>
 
-  <!-- Modal for Adding / Editing Project -->
-  <div id="projectModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2 id="modalProjectTitle">Add Project</h2>
-      <form id="projectForm" method="POST" action="/admin/projects">
-        <input type="hidden" name="" id="projectIndex">
-        
-        <label>Title</label>
-        <input type="text" name="title" id="projTitle" required>
-        
-        <label>Short Description</label>
-        <input type="text" name="shortDescription" id="projShortDesc" required>
-        
-        <label>Long Description (optional)</label>
-        <textarea name="longDescription" id="projLongDesc" rows="4"></textarea>
-        
-        <label>Cover Image URL (optional)</label>
-        <input type="text" name="coverImageUrl" id="projCover">
-        
-        <label>GitHub URL (optional)</label>
-        <input type="text" name="githubUrl" id="projGitHub">
-        
-        <label>Live URL (optional)</label>
-        <input type="text" name="liveUrl" id="projLive">
-        
-        <label>
-          <input type="checkbox" name="isFeatured" id="projFeatured"> Featured
-        </label>
-        
-        <button type="submit" class="btn-save">Save</button>
-      </form>
-    </div>
-  </div>
 </div>
 
 <% if (success) { %>
