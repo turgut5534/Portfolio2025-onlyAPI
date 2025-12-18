@@ -411,7 +411,7 @@
 }
 
 .project-item {
-  background-color: #f9f9f9; /* light background to separate from page */
+  background-color: #2a2d2e; /* light background to separate from page */
   padding: 1.5rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(58, 55, 55, 0.1); /* subtle shadow */
@@ -467,7 +467,7 @@
 }
 
 .study-item {
-  background-color: #f9f9f9; /* light card background */
+  background-color: #2a2d2e; /* light card background */
   padding: 1.25rem 1.5rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -509,7 +509,7 @@
 }
 
 .profile-info-card {
-  background: #ffffff;
+  background: #2a2d2e;
   border-radius: 12px;
   padding: 20px 24px;
   margin: 20px 0 30px;
@@ -531,14 +531,14 @@
 
 .profile-info-card .label {
   font-size: 14px;
-  color: #777;
+  color: white;
   font-weight: 500;
 }
 
 .profile-info-card .value {
   font-size: 15px;
   font-weight: 600;
-  color: #333;
+  color: white;
 }
 
 /* ROLE BADGES */
@@ -552,7 +552,7 @@
 
 /* Role colors */
 .profile-info-card .role.admin {
-  background: #e3f2fd;
+  background: #15311e;
   color: #1565c0;
 }
 
