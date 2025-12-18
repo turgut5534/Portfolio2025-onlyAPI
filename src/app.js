@@ -59,6 +59,10 @@ app.get('/project/:id', async (req, res) => {
         const response = await axios.get(`${url}/project/${req.params.id}`);
 
         const data = response.data;
+
+        if(!data) {
+            res.redirect('/')
+        }
         console.log(response.data)
 
         res.render('portfolio-details', { title: 'Detail' , user: data.user, project: data, url}); 
@@ -70,6 +74,9 @@ app.get('/project/:id', async (req, res) => {
 
 });
 
+app.use((req, res) => {
+    res.redirect('/');
+});
 
 
 app.listen(port, () => {
