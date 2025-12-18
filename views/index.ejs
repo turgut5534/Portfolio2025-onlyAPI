@@ -1,30 +1,4 @@
 <%- include("partials/header") %>
-<body class="index-page">
-
-  <header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center">
-
-      <a href="/" class="logo d-flex align-items-center me-auto">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.webp" alt=""> -->
-        <h1 class="sitename"><%= user.profile.fullName%></h1>
-      </a>
-
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a class="scroll-link active" href="#hero">Home</a></li>
-          <li><a class="scroll-link" href="#about">About</a></li>
-          <li><a class="scroll-link" href="#resume">Resume</a></li>
-          <li><a class="scroll-link" href="#portfolio">Portfolio</a></li>
-           <% if(user.settings.allow_contact) { %>
-          <li><a class="scroll-link" href="#contact">Contact</a></li>
-          <%}%>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-
-    </div>
-  </header>
 
   <main class="main">
 
@@ -289,6 +263,10 @@
                       </a>
                       <% if (project.liveUrl) { %>
                       <a href="<%= project.liveUrl%>" target="_blank" class="portfolio-details">
+                        <i class="bi bi-arrow-right"></i>
+                      </a>
+                      <%} else {%>
+                          <a href="/project/<%= project.id %>"  class="portfolio-details">
                         <i class="bi bi-arrow-right"></i>
                       </a>
                       <%}%>

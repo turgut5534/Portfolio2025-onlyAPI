@@ -51,6 +51,27 @@ app.get('/', async (req, res) => {
 });
 
 
+
+app.get('/project/:id', async (req, res) => {
+
+    try {
+        
+        const response = await axios.get(`${url}/project/${req.params.id}`);
+
+        const data = response.data;
+        console.log(response.data)
+
+        res.render('portfolio-details', { title: 'Detail' , user: data.user, project: data, url}); 
+
+    } catch(e) {
+        console.log(e)
+        res.render('404')
+    }
+
+});
+
+
+
 app.listen(port, () => {
     console.log('Server is running on http://localhost:3002');
 });
