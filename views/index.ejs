@@ -84,7 +84,10 @@
                 <% if (user.profile.cvUrl){ %>
                 <a target="_blank" href="<%= url%>/uploads/cv/<%= user.profile.cvUrl %>" class="btn-primary"><i class="bi bi-download"></i> Download CV</a>
                 <%}%>
+
+                <% if(user.settings.allow_contact) { %>
                 <a href="#" class="btn-secondary"><i class="bi bi-envelope"></i> Contact</a>
+                <%}%>
               </div>
 
               <div class="social-connect">
