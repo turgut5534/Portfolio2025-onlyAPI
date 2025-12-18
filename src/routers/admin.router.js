@@ -295,6 +295,42 @@ router.post('/users/add', async (req, res) => {
     }
 });
 
+router.post('/users/update/:id', async (req, res) => {
+    try {
+        await axios.patch(`${url}/admin/users/${req.params.id}`, req.body, {
+            headers: { Authorization: `Bearer ${req.session.token}` }
+        });
+
+
+        req.session.data = null
+
+        req.session.success = 'The user was updated successfully'
+        res.redirect('/admin/users');
+
+    } catch (e) {
+
+        console.log(e)
+        let errorMessage = "Something went wrong";
+
+        if (e.response && e.response.data) {
+            if (Array.isArray(e.response.data.message)) {
+                errorMessage = e.response.data.message.join(', ');
+            } else if (e.response.data.message) {
+                errorMessage = e.response.data.message;
+            } else if (e.response.data.error) {
+                errorMessage = e.response.data.error;
+            }
+        }
+
+        // Save error in session
+        req.session.error = errorMessage;
+        req.session.data = req.body
+
+        // Redirect back to the add user page
+        res.redirect('/admin/users');
+    }
+});
+
 
 router.get('/users/edit/:id', async (req,res) => {
     try {
@@ -310,6 +346,8 @@ router.get('/users/edit/:id', async (req,res) => {
 
         const error = req.session.error
         req.session.error = null
+
+        req.session.data = null
 
         res.render('admin/users/edit', {admin: response.data, success,error})
 
